@@ -1,0 +1,176 @@
+<!doctype html>
+
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+
+<html>
+  <head>
+    <title>Control LEDs</title>
+    <meta name="viewport" content="width=device-width">
+    <style>
+
+    input[type=range] {
+    -webkit-appearance: none;
+    width: 80%;
+    margin: 3.3px 0;
+    background-color: transparent;
+    }
+    input[type=range]:focus {
+      outline: none;
+    }
+    input[type=range]::-webkit-slider-runnable-track {
+      width: 100%;
+      height: 15px;
+      cursor: pointer;
+      box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
+      background: #30005a;
+      border-radius: 1.3px;
+      border: 0.2px solid #010101;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      box-shadow: 4.3px 4.3px 4.3px #000000, 0px 0px 4.3px #0d0d0d;
+      border: 1.6px solid #000000;
+      height: 20px;
+      width: 30px;
+      border-radius: 29px;
+      background: #ffffff;
+      cursor: pointer;
+      -webkit-appearance: none;
+      margin-top: -3.5px;
+    }
+    input[type=range]:focus::-webkit-slider-runnable-track {
+      background: #5600a1;
+    }
+    input[type=range]::-moz-range-track {
+      width: 100%;
+      height: 10px;
+      cursor: pointer;
+      box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
+      background: #30005a;
+      border-radius: 1.3px;
+      border: 0.2px solid #010101;
+    }
+    input[type=range]::-moz-range-thumb {
+      box-shadow: 4.3px 4.3px 4.3px #000000, 0px 0px 4.3px #0d0d0d;
+      border: 1.6px solid #000000;
+      height: 15px;
+      width: 21px;
+      border-radius: 29px;
+      background: #ffffff;
+      cursor: pointer;
+    }
+    input[type=range]::-ms-track {
+      width: 100%;
+      height: 10px;
+      cursor: pointer;
+      background: transparent;
+      border-color: transparent;
+      color: transparent;
+    }
+    input[type=range]::-ms-fill-lower {
+      background: #0a0013;
+      border: 0.2px solid #010101;
+      border-radius: 2.6px;
+      box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
+    }
+    input[type=range]::-ms-fill-upper {
+      background: #30005a;
+      border: 0.2px solid #010101;
+      border-radius: 2.6px;
+      box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
+    }
+    input[type=range]::-ms-thumb {
+      box-shadow: 4.3px 4.3px 4.3px #000000, 0px 0px 4.3px #0d0d0d;
+      border: 1.6px solid #000000;
+      height: 15px;
+      width: 21px;
+      border-radius: 29px;
+      background: #ffffff;
+      cursor: pointer;
+      height: 8.4px;
+    }
+    input[type=range]:focus::-ms-fill-lower {
+      background: #30005a;
+    }
+    input[type=range]:focus::-ms-fill-upper {
+      background: #5600a1;
+    }
+
+
+
+      img {
+        max-width: 100%;
+      }
+      html {
+        background-color: black;
+        color: white;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font: 13px Helvetica, Arial; }
+      form {max-height: 90%; background: #000; padding: 0px; top: 0; width: 100%;}
+      form select { background: #30005a; color: #ffffff; padding: 10px; width: 85%; margin-right: .5%;}
+      form input { border: 0; padding: 10px; width: 85%; margin-right: .5%; }
+      form button { width: 9%; background: rgb(130, 224, 255); position: absolute; bottom: 0px; border: none; padding: 100px; }
+      input[type="range"] {
+        width:80%;
+      }
+      .opciones {padding-top: 25px; padding-bottom: 50px}
+
+      .formulario {
+        text-align: center;
+      }
+      .sender {
+        width:100%;
+        height:10%;
+        background-color: #404040;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <form method="post" class="formulario">
+      <div id="0" class="opciones">
+      <select name="secuencia">
+        <option value="1">Color sólido</option>
+        <option value="2">Estrobo</option>
+        <option value="3">Secuencia 1</option>
+        <option value="4">Secuencia 2</option>
+        <option value="5">Secuencia 3</option>
+        <option value="6">Secuencia 4</option>
+      </select>
+      </div>
+      <div id="1" class="opciones">Color
+        <input name="color" type="color" value="#ff0000" onChange="cambiarColor()"/>
+      </div>
+      <div id="2" class="opciones">Brillo
+        <input type="range" name="brillo" value="Brillo" id="brilloin" min="0" max="100" step="1" onchange="brilloout.value = brilloin.value"/>
+        <output name="br" id="brilloout">50</output>
+      </div>
+      <div id="3" class="opciones">BPM
+        <input type="range" name="velocidad" value="Velocidad" id="velinid" min="100" max="150" step="1" onchange="veloutid.value = velinid.value"/>
+        <output name="vel" id="veloutid">125</output>
+      </div>
+      <div id="footer">
+        <input class="sender" type="submit" value='Actualizar'></input>
+      </div>
+    </form>
+  </body>
+
+  <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+
+
+
+  <script type="text/javascript">
+
+  function cambiarColor() {
+  }
+
+  </script>
