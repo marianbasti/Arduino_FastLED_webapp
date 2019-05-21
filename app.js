@@ -86,9 +86,15 @@ function hexToHSL(hex) {
 app.get('/', function (req, res) {
   res.sendFile(__dirname + '/index.html');
 });
+app.get('/contacto', function (req, res) {
+  res.sendFile(__dirname + '/contacto.html');
+});
 
 app.get('/background-image.png', function (req, res) {
   res.sendFile(__dirname + '/background-image.png');
+});
+app.get('/threelines.png', function (req, res) {
+  res.sendFile(__dirname + '/threelines.png');
 });
 
 
