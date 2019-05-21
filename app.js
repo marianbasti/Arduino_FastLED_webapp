@@ -87,6 +87,10 @@ app.get('/', function (req, res) {
   res.sendFile(__dirname + '/index.html');
 });
 
+app.get('/background-image.png', function (req, res) {
+  res.sendFile(__dirname + '/background-image.png');
+});
+
 
 
 app.listen(4000, function () {
