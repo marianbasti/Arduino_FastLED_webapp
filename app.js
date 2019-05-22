@@ -19,6 +19,7 @@ SerialPort.list(function (err, results) {
     }
     //console.log(results);
     console.log("Buscando controlador para conectarse.");
+    console.log(results);
     var i = 0;
     if ('undefined' !== typeof results && results.length > 0) {
       while (results[i].productId != 8037){
@@ -37,7 +38,7 @@ SerialPort.list(function (err, results) {
         baudRate: 9600
       });
     } else {
-      console.log("No se han encontrado dispositivos conectados");
+      console.log("No se han encontrado dispositivos");
     }
 });
 
@@ -133,7 +134,7 @@ app.post('/', function(req, res) {
     port.write(mensaje);
     read();
   } else {
-    console.log("No hay dispositivo al que enviarle los datos");
+    console.log("No hay dispositivo al que enviarle los datos.");
   }
   res.status(204).send();
 });
