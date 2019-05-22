@@ -1,16 +1,18 @@
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
+var comPort;
 app.use(bodyParser.urlencoded());
 
 //Crear puerto serie
 const SerialPort = require('serialport')
-const port = new SerialPort("COM11", {
-  baudRate: 9600
-});
+if (comPort !== "undefined") {
+
+}
 
 //SERIAL
 //Enlistar puertos disponibles
+
 SerialPort.list(function (err, results) {
     if (err) {
         throw err;
@@ -18,30 +20,42 @@ SerialPort.list(function (err, results) {
     //console.log(results);
     console.log("Buscando controlador para conectarse.");
     var i = 0;
-    while (results[i].productId != 8037){
-      i++;
-      if (i == 40) {
-        console.log("Controlador no encontrado.");
-        throw err;
-        break;
+    if ('undefined' !== typeof results && results.length > 0) {
+      while (results[i].productId != 8037){
+        i++;
+        console.log("COM"+i);
+        if (i == 10) {
+          console.log("Controlador no encontrado.");
+          comPort = "undefined";
+          throw err;
+          break;
+        }
       }
+      comPort = results[i].comName;
+      console.log("Contolador encontrado en puerto " + results[i].comName);
+      const port = new SerialPort(comPort, {
+        baudRate: 9600
+      });
+    } else {
+      console.log("No se han encontrado dispositivos conectados");
     }
-    console.log("Contolador encontrado en puerto " + results[i].comName);
 });
 
 //Mensaje al conectarse
-port.on('open', function() {
-  //Despierto al Arduino
-  port.write("Hola bebe hermoso");
-  read();
-  console.log("Conectado exitosamente. Esperando instrucciones beep boop");
-});
+if ( typeof comPort !== 'undefined') {
+  port.on('open', function() {
+    //Despierto al Arduino
+    port.write("Hola bebe hermoso");
+    read();
+    console.log("Conectado exitosamente. Esperando instrucciones beep boop");
+  });
+
 
 port.on('close', function() {
   console.log("Se ha desconectado el controlador. Esta todo bien?");
   console.log("Reiniciar server para recuperar funcionalidad");
 });
-
+}
 function read () // for reading
 {
     port.on('data', function(data)
@@ -115,7 +129,11 @@ app.post('/', function(req, res) {
   var data = [req.body.secuencia,brillo.toFixed(2),req.body.velocidad,color.h.toFixed(2),color.s.toFixed(2),color.l.toFixed(2)];
   var mensaje = data.join();
   //console.log(mensaje);
-  port.write(mensaje);
-  read();
+  if ( typeof port !== 'undefined') {
+    port.write(mensaje);
+    read();
+  } else {
+    console.log("No hay dispositivo al que enviarle los datos");
+  }
   res.status(204).send();
 });
