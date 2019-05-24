@@ -1,30 +1,25 @@
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
-var comPort;
+var port;
 app.use(bodyParser.urlencoded());
 
 //Crear puerto serie
 const SerialPort = require('serialport')
-if (comPort !== "undefined") {
-
-}
 
 //SERIAL
 //Enlistar puertos disponibles
-
 SerialPort.list(function (err, results) {
     if (err) {
         throw err;
     }
     //console.log(results);
-    console.log("Buscando controlador para conectarse.");
-    console.log(results);
+    console.log("Buscando controlador para conectarse...");
+    //console.log(results);
     var i = 0;
-    if ('undefined' !== typeof results && results.length > 0) {
+    if (results.length > 0) {
       while (results[i].productId != 8037){
         i++;
-        console.log("COM"+i);
         if (i == 10) {
           console.log("Controlador no encontrado.");
           comPort = "undefined";
@@ -32,18 +27,20 @@ SerialPort.list(function (err, results) {
           break;
         }
       }
-      comPort = results[i].comName;
+      var comPort = results[i].comName;
       console.log("Contolador encontrado en puerto " + results[i].comName);
-      const port = new SerialPort(comPort, {
-        baudRate: 9600
-      });
+      serialConnect (comPort);
     } else {
       console.log("No se han encontrado dispositivos");
     }
 });
 
-//Mensaje al conectarse
-if ( typeof comPort !== 'undefined') {
+
+function serialConnect (com) {
+  port = new SerialPort(com, {
+    baudRate: 9600
+  });
+  //Mensaje al conectarse
   port.on('open', function() {
     //Despierto al Arduino
     port.write("Hola bebe hermoso");
@@ -51,20 +48,19 @@ if ( typeof comPort !== 'undefined') {
     console.log("Conectado exitosamente. Esperando instrucciones beep boop");
   });
 
-
-port.on('close', function() {
-  console.log("Se ha desconectado el controlador. Esta todo bien?");
-  console.log("Reiniciar server para recuperar funcionalidad");
-});
+  port.on('close', function() {
+    console.log("Se ha desconectado el controlador. Esta todo bien?");
+    console.log("Reiniciar server para recuperar funcionalidad");
+  });
 }
+
 function read () // for reading
 {
     port.on('data', function(data)
     {
         console.log(data.toString());
     });
-}
-
+};
 
 
 // Convierto el color a HSL (gracias xenozauros)
@@ -101,8 +97,8 @@ function hexToHSL(hex) {
 app.get('/', function (req, res) {
   res.sendFile(__dirname + '/index.html');
 });
-app.get('/contacto', function (req, res) {
-  res.sendFile(__dirname + '/contacto.html');
+app.get('/acercade', function (req, res) {
+  res.sendFile(__dirname + '/acercade.html');
 });
 
 app.get('/background-image.png', function (req, res) {
