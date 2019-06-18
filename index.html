@@ -246,13 +246,13 @@
 
   var galletita = document.cookie;
   var fecha = new Date();
-  fecha.setTime(fecha.getTime() + 60000);
+  fecha.setTime(fecha.getTime() + 40000000);
   if (galletita != "logged=true") {
     var pass = prompt("Contraseña:");
     var encrypted = encrypt(pass);
     if (encrypted == 'Y29sb3Jlcw==' || galletita == "logged=true") {
       document.getElementById("pw").disabled = false;
-      document.cookie = "logged=true";
+      document.cookie = "logged=true; expires=" + fecha;
     } else {
       document.getElementById('f').append("Contraseña incorrecta: ");
       document.getElementById('f').append(encrypted);
