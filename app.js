@@ -2,7 +2,7 @@ var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 var port;
-app.use(bodyParser.urlencoded());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 //Crear puerto serie
 const SerialPort = require('serialport')
@@ -97,6 +97,24 @@ function hexToHSL(hex) {
 app.get('/', function (req, res) {
   res.sendFile(__dirname + '/index.html');
 });
+app.post('/log', function (req, res) {
+  var cookie = req.cookies;
+  console.log(req.body);
+  console.log(cookie);
+  if (cookie == undefined) {
+    if (req.body.value == 'colores') {
+    res.cookie('logged',true, { maxAge: 900000, httpOnly: true });
+    console.log('cookie created successfully');
+  } else {
+    console.log('Failed login attempt: ' + req.body.value);
+  }
+  } else {
+    // yes, cookie was already present
+    console.log('cookie exists', cookie);
+  }
+  res.status(204).send();
+});
+
 app.get('/acercade', function (req, res) {
   res.sendFile(__dirname + '/acercade.html');
 });

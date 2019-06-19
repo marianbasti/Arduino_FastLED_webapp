@@ -232,6 +232,9 @@
         <input id='pw' class="sender" type="submit" value='Actualizar' disabled></input>
       </div>
     </form>
+    <form id="log" type="hidden" action="/log" method="post">
+
+    </form>
   </body>
 
   <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
@@ -244,23 +247,23 @@
     return(window.btoa( word ));
   }
 
+  function log(params) {
+    document.getElementById("log").value = params;
+    document.getElementById("log").submit();
+  }
+
   var galletita = document.cookie;
-  var fecha = new Date();
-  fecha.setTime(fecha.getTime() + 40000000);
   if (galletita != "logged=true") {
     var pass = prompt("Contraseña:");
-    var encrypted = encrypt(pass);
-    if (encrypted == 'Y29sb3Jlcw==' || galletita == "logged=true") {
+    log(pass);
+    if (galletita == "logged=true") {
       document.getElementById("pw").disabled = false;
-      document.cookie = "logged=true; expires=" + fecha;
     } else {
-      document.getElementById('f').append("Contraseña incorrecta: ");
-      document.getElementById('f').append(encrypted);
+      document.getElementById('f').append("Contraseña incorrecta");
       document.getElementById('f').append(galletita);
     }
   } else {
     document.getElementById("pw").disabled = false;
-    document.getElementById('f').append(fecha.toUTCString());
   }
 
 
