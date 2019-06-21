@@ -1,4 +1,5 @@
 var express = require('express');
+var session = require('cookie-session');
 var app = express();
 var bodyParser = require('body-parser');
 var port;
@@ -95,18 +96,19 @@ function hexToHSL(hex) {
 
 //Express
 app.get('/', function (req, res) {
+  var cookie = req.cookie;
+  console.log(cookie);
   res.sendFile(__dirname + '/index.html');
 });
 app.post('/log', function (req, res) {
   var cookie = req.cookies;
-  console.log(req.body);
   console.log(cookie);
   if (cookie == undefined) {
-    if (req.body.value == 'colores') {
-    res.cookie('logged',true, { maxAge: 900000, httpOnly: true });
-    console.log('cookie created successfully');
+    if (req.body.log == 'colores') {
+    res.cookie('logged', 'true', { maxAge: 900000, httpOnly: true });
+    console.log('Someone logged successfuly');
   } else {
-    console.log('Failed login attempt: ' + req.body.value);
+    console.log('Failed login attempt: ' + req.body.log);
   }
   } else {
     // yes, cookie was already present

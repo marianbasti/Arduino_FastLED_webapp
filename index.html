@@ -232,9 +232,6 @@
         <input id='pw' class="sender" type="submit" value='Actualizar' disabled></input>
       </div>
     </form>
-    <form id="log" type="hidden" action="/log" method="post">
-
-    </form>
   </body>
 
   <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
@@ -243,27 +240,30 @@
 
   <script type="text/javascript">
   //MAX SECURITY
-  function encrypt(word) {
-    return(window.btoa( word ));
-  }
-
   function log(params) {
-    document.getElementById("log").value = params;
-    document.getElementById("log").submit();
+    const form = document.createElement('form');
+    form.method = "post";
+    form.action = "/log";
+    const hiddenField = document.createElement('input');
+    hiddenField.type = 'hidden';
+    hiddenField.name = "log";
+    hiddenField.value = params;
+    form.appendChild(hiddenField);
+    document.body.appendChild(form);
+    form.submit();
   }
 
-  var galletita = document.cookie;
+  var galletita = $.cookie;
   if (galletita != "logged=true") {
     var pass = prompt("Contraseña:");
+    document.getElementById('f').append("cookie: " + galletita);
     log(pass);
-    if (galletita == "logged=true") {
-      document.getElementById("pw").disabled = false;
-    } else {
-      document.getElementById('f').append("Contraseña incorrecta");
-      document.getElementById('f').append(galletita);
-    }
-  } else {
+    galletita = $.cookie;
+  } else if (galletita == "logged=true") {
     document.getElementById("pw").disabled = false;
+  } else {
+    document.getElementById('f').append("Contraseña incorrecta");
+    document.getElementById('f').append(galletita);
   }
 
 
