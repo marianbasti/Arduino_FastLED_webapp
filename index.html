@@ -253,17 +253,14 @@
     form.submit();
   }
 
-  var galletita = $.cookie;
+  var galletita = document.cookie;
   if (galletita != "logged=true") {
     var pass = prompt("Contraseña:");
-    document.getElementById('f').append("cookie: " + galletita);
     log(pass);
-    galletita = $.cookie;
   } else if (galletita == "logged=true") {
     document.getElementById("pw").disabled = false;
   } else {
     document.getElementById('f').append("Contraseña incorrecta");
-    document.getElementById('f').append(galletita);
   }
 
 

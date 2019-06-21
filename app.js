@@ -1,9 +1,11 @@
 var express = require('express');
-var session = require('cookie-session');
 var app = express();
 var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
 var port;
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(express.static('public'));
 
 //Crear puerto serie
 const SerialPort = require('serialport')
@@ -96,25 +98,24 @@ function hexToHSL(hex) {
 
 //Express
 app.get('/', function (req, res) {
-  var cookie = req.cookie;
-  console.log(cookie);
   res.sendFile(__dirname + '/index.html');
 });
+
 app.post('/log', function (req, res) {
-  var cookie = req.cookies;
-  console.log(cookie);
-  if (cookie == undefined) {
+  var galleta = req.cookies;
+  if (galleta.logged !== true) {
     if (req.body.log == 'colores') {
-    res.cookie('logged', 'true', { maxAge: 900000, httpOnly: true });
-    console.log('Someone logged successfuly');
-  } else {
-    console.log('Failed login attempt: ' + req.body.log);
-  }
+      res.cookie('logged', 'true', { maxAge: 900000, httpOnly: false });
+      res.redirect(req.get('referer'));
+    } else {
+      console.log('Failed login attempt: ' + req.body.log);
+      res.redirect(req.get('referer'));
+    }
   } else {
     // yes, cookie was already present
-    console.log('cookie exists', cookie);
+    console.log('cookie exists', galleta);
+    res.status(204).send();
   }
-  res.status(204).send();
 });
 
 app.get('/acercade', function (req, res) {
