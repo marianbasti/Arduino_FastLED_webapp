@@ -101,10 +101,13 @@ app.get('/', function (req, res) {
   res.sendFile(__dirname + '/index.html');
 });
 
+//Password check and cookie giver
 app.post('/log', function (req, res) {
   var galleta = req.cookies;
   if (galleta.logged !== true) {
+    //Should encrypt this
     if (req.body.log == 'colores') {
+      console.log("Successful log");
       res.cookie('logged', 'true', { maxAge: 900000, httpOnly: false });
       res.redirect(req.get('referer'));
     } else {
@@ -146,6 +149,7 @@ app.post('/', function(req, res) {
   console.log(color);
   var data = [req.body.secuencia,brillo.toFixed(2),req.body.velocidad,color.h.toFixed(2),color.s.toFixed(2),color.l.toFixed(2)];
   var mensaje = data.join();
+  console.log(mensaje);
   //console.log(mensaje);
   if ( typeof port !== 'undefined') {
     port.write(mensaje);

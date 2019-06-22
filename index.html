@@ -208,10 +208,11 @@
       <select name="secuencia">
         <option value="1">Color sólido</option>
         <option value="2">Estrobo</option>
-        <option value="3">Secuencia 1</option>
-        <option value="4">Secuencia 2</option>
-        <option value="5">Secuencia 3</option>
-        <option value="6">Secuencia 4</option>
+        <option value="3">Confetti</option>
+        <option value="4">Fuego</option>
+        <option value="5">Ondas</option>
+        <option value="6">Arcoiris</option>
+        <option value="7">Beat</option>
       </select>
       </div>
       <div id="1" class="opciones">
@@ -225,8 +226,8 @@
         <output name="br" id="brilloout">50</output>
       </div>
       <div id="3" class="opciones">BPM
-        <input type="range" name="velocidad" value="Velocidad" id="velinid" min="100" max="150" step="1" onchange="veloutid.value = velinid.value"/>
-        <output name="vel" id="veloutid">125</output>
+        <input type="range" name="velocidad" value="Velocidad" id="velinid" min="1" max="50" step="1" onchange="veloutid.value = velinid.value"/>
+        <output name="vel" id="veloutid">25</output>
       </div>
       <div id="footer">
         <input id='pw' class="sender" type="submit" value='Actualizar' disabled></input>
@@ -239,7 +240,8 @@
 
 
   <script type="text/javascript">
-  //MAX SECURITY
+
+  //Funcion para crear dinamicamente un elemento para enviar la contraseña ingresada al server
   function log(params) {
     const form = document.createElement('form');
     form.method = "post";
@@ -253,16 +255,15 @@
     form.submit();
   }
 
+  //Veo la cookie
   var galletita = document.cookie;
+  //Si no esta logueado, prompt para ingresar la contraseña
   if (galletita != "logged=true") {
     var pass = prompt("Contraseña:");
     log(pass);
-  } else if (galletita == "logged=true") {
+  } else if (galletita == "logged=true") { //Si lo esta, habilitar el boton
     document.getElementById("pw").disabled = false;
-  } else {
-    document.getElementById('f').append("Contraseña incorrecta");
   }
-
 
   /* Set the width of the side navigation to 250px and the left margin of the page content to 250px */
   function openNav() {
