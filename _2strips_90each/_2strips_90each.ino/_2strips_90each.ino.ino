@@ -64,7 +64,6 @@ void loop() {
 
   switch (secuencia) {
     case 0:
-      secuenciaEncendido();
       fadeToBlackBy( leds[0], NUM_LEDS, 70);
       fadeToBlackBy( leds[1], NUM_LEDS, 70);
       break;
