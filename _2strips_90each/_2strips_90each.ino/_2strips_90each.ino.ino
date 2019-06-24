@@ -8,6 +8,7 @@
 
 bool gReverseDirection = false;
 bool isOn = false;
+bool alt = false;
 String data;
 int secuencia = 0;
 int bpm = 100;
@@ -63,6 +64,7 @@ void loop() {
 
   switch (secuencia) {
     case 0:
+      secuenciaEncendido();
       fadeToBlackBy( leds[0], NUM_LEDS, 70);
       fadeToBlackBy( leds[1], NUM_LEDS, 70);
       break;
@@ -73,19 +75,22 @@ void loop() {
       strobe(bpm, s, l);
       break;
     case 3:
-      confetti(h, s);
+      strobe_alternate(bpm, s, l);
       break;
     case 4:
-      Fire2012WithPalette(h, s);
+      confetti(h, s);
       break;
     case 5:
-      sinelon(bpm);
+      Fire2012WithPalette(h, s);
       break;
     case 6:
-      rainbow();
+      sinelon(bpm);
       break;
     case 7:
-      beat(h, s, l);
+      rainbow();
+      break;
+    case 8:
+      sweep(h, s, l);
       break;
   }
 
@@ -163,7 +168,7 @@ void strobe(int bpm, int s, int l) {
     }
     isOn = true;
     delay((2000/bpm)+1);
-    
+
   } else {
     for (int i = 0; i < NUM_LEDS; i++) {
       leds[0][i] = CRGB::Black;
@@ -172,6 +177,31 @@ void strobe(int bpm, int s, int l) {
     isOn = false;
     fadeToBlackBy( leds[0], NUM_LEDS, 50);
     fadeToBlackBy( leds[1], NUM_LEDS, 50);
+  }
+}
+
+void strobe_alternate(int bpm, int s, int l) {
+  if (isOn == false ) {
+    if (alt == true) {
+      for (int i = 0; i < NUM_LEDS; i++) {
+        leds[0][i] = CHSV(h, s, l);
+      }
+      alt = false;
+    } else {
+      for (int i = 0; i < NUM_LEDS; i++) {
+        leds[1][i] = CHSV(h, s, l);
+      }
+      alt = true;
+    }
+    isOn = true;
+    delay((2000/bpm)+1);
+
+  } else {
+    for (int i = 0; i < NUM_LEDS; i++) {
+      leds[0][i] = CRGB::Black;
+      leds[1][i] = CRGB::Black;
+    }
+    isOn = false;
   }
 }
 
@@ -208,13 +238,16 @@ void secuenciaEncendido() {
   }
 }
 
-void beat(int h, int s, int l) {  
-  for (int i = 0; i < NUM_LEDS; i++) {
-    leds[0][i] = CHSV(h, s, l);
-    leds[1][i] = CHSV(h, s, l);
+void sweep(int h, int s, int l) {
+  for (int i = 0; i < NUM_LEDS*1.5; i++) {
+    if (i<NUM_LEDS) {
+      leds[0][i] = CHSV(h, s, l);
+    }
+    if (i-NUM_LEDS/2<0) {
+      leds[1][i-(NUM_LEDS/2)] = CHSV(h, s, l);
+    }
+    fadeToBlackBy(leds[0], NUM_LEDS, 80);
+    fadeToBlackBy(leds[1], NUM_LEDS, 80);
+    delay(30);
   }
-  fadeToBlackBy( leds[0], NUM_LEDS, 50);
-  fadeToBlackBy( leds[1], NUM_LEDS, 50);
 }
-
-
