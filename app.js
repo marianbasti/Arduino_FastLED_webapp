@@ -23,6 +23,7 @@ SerialPort.list(function (err, results) {
     //console.log(results);
     var i = 0;
     if (results.length > 0) {
+      //Busco productId del Arduino Micro
       while (results[i].productId != 8037){
         i++;
         if (i == 10) {
