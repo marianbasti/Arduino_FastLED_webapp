@@ -5,8 +5,6 @@ var io = require('socket.io')(http);
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var port;
-var favicon = require('serve-favicon');
-app.use(favicon(__dirname + '/favicon.ico'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static('public'));
@@ -105,6 +103,34 @@ function hexToHSL(hex) {
 app.get('/', function (req, res) {
   res.sendFile(__dirname + '/index.html');
 });
+app.get('/acercade', function (req, res) {
+  res.sendFile(__dirname + '/acercade.html');
+});
+app.get('/altGUI_1', function (req, res) {
+  res.sendFile(__dirname + '/altGUI_botones.html');
+});
+app.get('/background-image.png', function (req, res) {
+  res.sendFile(__dirname + '/background-image.png');
+});
+app.get('/threelines.png', function (req, res) {
+  res.sendFile(__dirname + '/threelines.png');
+});
+app.get('/site.webmanifest', function (req, res) {
+  res.sendFile(__dirname + '/site.webmanifest');
+});
+app.get('/favicon-32x32.png', function (req, res) {
+  res.sendFile(__dirname + '/favicon-32x32.png');
+});
+app.get('/favicon-16x16.png', function (req, res) {
+  res.sendFile(__dirname + '/favicon-16x16.png');
+});
+app.get('/apple-touch-icon.png', function (req, res) {
+  res.sendFile(__dirname + '/apple-touch-icon.png');
+});
+app.get('/safari-pinned-tab.svg', function (req, res) {
+  res.sendFile(__dirname + '/safari-pinned-tab.svg');
+});
+
 
 //Password check and cookie giver
 app.post('/log', function (req, res) {
@@ -124,20 +150,6 @@ app.post('/log', function (req, res) {
     console.log('cookie exists', galleta);
     res.status(204).send();
   }
-});
-
-app.get('/acercade', function (req, res) {
-  res.sendFile(__dirname + '/acercade.html');
-});
-app.get('/altGUI_1', function (req, res) {
-  res.sendFile(__dirname + '/altGUI_botones.html');
-});
-
-app.get('/background-image.png', function (req, res) {
-  res.sendFile(__dirname + '/background-image.png');
-});
-app.get('/threelines.png', function (req, res) {
-  res.sendFile(__dirname + '/threelines.png');
 });
 
 
