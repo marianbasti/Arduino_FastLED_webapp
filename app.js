@@ -126,6 +126,9 @@ app.post('/log', function (req, res) {
 app.get('/acercade', function (req, res) {
   res.sendFile(__dirname + '/acercade.html');
 });
+app.get('/altGUI_botones', function (req, res) {
+  res.sendFile(__dirname + '/altGUI_1.html');
+});
 
 app.get('/background-image.png', function (req, res) {
   res.sendFile(__dirname + '/background-image.png');
@@ -146,6 +149,7 @@ io.on('connection', function(socket){
     var color = hexToHSL(msg.color);
     var data = [msg.secuencia, msg.brillo,msg.velocidad,color.h.toFixed(2),color.s.toFixed(2),color.l.toFixed(2)];var mensaje = data.join();
     console.log("Enviando mensaje...");
+    console.log(msg);
     if ( typeof port !== 'undefined') {
       port.write(mensaje);
       read();
