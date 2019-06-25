@@ -203,9 +203,9 @@
             <img src="/threelines.png" alt="sidenav" width="50px" height="40px">
     </span>
 
-    <form id="f" method="post" class="formulario">
+    <form id="form" method="post" class="formulario">
       <div id="0" class="opciones">
-      <select name="secuencia">
+      <select id="secuencia">
         <option value="1">Color sólido</option>
         <option value="2">Estrobo</option>
         <option value="3">Estrobo alternado</option>
@@ -220,7 +220,7 @@
         <div class="descripcion">
           Color
         </div>
-        <input name="color" type="color" value="#ff0000" onChange="cambiarColor()"/>
+        <input id="color" type="color" value="#ff0000"/>
       </div>
       <div id="2" class="opciones">Brillo
         <input type="range" name="brillo" value="Brillo" id="brilloin" min="0" max="100" step="1" onchange="brilloout.value = brilloin.value"/>
@@ -230,14 +230,12 @@
         <input type="range" name="velocidad" value="Velocidad" id="velinid" min="1" max="50" step="1" onchange="veloutid.value = velinid.value"/>
         <output name="vel" id="veloutid">25</output>
       </div>
-      <div id="footer">
-        <input id='pw' class="sender" type="submit" value='Actualizar' disabled></input>
-      </div>
     </form>
   </body>
 
   <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
-
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
 
 
   <script type="text/javascript">
@@ -254,17 +252,29 @@
     form.appendChild(hiddenField);
     document.body.appendChild(form);
     form.submit();
+    document.removeElement('input');
+    document.removeElement('form');
   }
 
   //Veo la cookie
-  var galletita = document.cookie;
+  var galletita = document.cookie.split(";");
   //Si no esta logueado, prompt para ingresar la contraseña
-  if (galletita != "logged=true") {
-    var pass = prompt("Contraseña:");
-    log(pass);
-  } else if (galletita == "logged=true") { //Si lo esta, habilitar el boton
-    document.getElementById("pw").disabled = false;
+  for (var i = 0; i<galletita.length; i++) {
+    if (galletita != "logged=true") {
+      var pass = prompt("Contraseña:");
+      log(pass);
+    } else if (galletita == "logged=true") { //Si lo esta, habilitar el boton
+    }
   }
+  $(function () {
+    var socket = io();
+    $('form').change(function(e){
+      e.preventDefault(); // prevents page reloading
+      var data = {secuencia: $('#secuencia').val(), brillo: $('#brilloin').val(), velocidad: $('#velinid').val(), color: $('#color').val() }
+      socket.emit('update', data);
+      return false;
+    });
+  });
 
   /* Set the width of the side navigation to 250px and the left margin of the page content to 250px */
   function openNav() {

@@ -49,7 +49,7 @@ void loop() {
 
   if (Serial.available()) {
     secuencia = Serial.readStringUntil(',').toInt();
-    temp = Serial.readStringUntil(',').toDouble() * 100;
+    temp = Serial.readStringUntil(',').toDouble();
     brillo = map(temp, 0, 100, 0, 255);
     bpm = Serial.readStringUntil(',').toInt();
     temp = Serial.readStringUntil(',').toDouble() * 100;

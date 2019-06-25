@@ -1,5 +1,7 @@
 var express = require('express');
 var app = express();
+var http = require('http').createServer(app);
+var io = require('socket.io')(http);
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var port;
@@ -134,28 +136,22 @@ app.get('/threelines.png', function (req, res) {
 
 
 
-app.listen(4000, function () {
+http.listen(4000, function () {
   console.log('Server corriendo en puerto 4000, bien hecho!');
 });
 
 //QUE HAGO CUANDO EL CLIENTE POSTEA
-app.post('/', function(req, res) {
-  //logueo que secuencia, velocidad y color pide el usuario
-  console.log("Secuencia: " + req.body.secuencia);
-  console.log("brillo: " + req.body.brillo);
-  var brillo = req.body.brillo/100;
-  console.log("Velocidad " + req.body.velocidad + "BPM");
-  var color = hexToHSL(req.body.color)
-  console.log(color);
-  var data = [req.body.secuencia,brillo.toFixed(2),req.body.velocidad,color.h.toFixed(2),color.s.toFixed(2),color.l.toFixed(2)];
-  var mensaje = data.join();
-  console.log(mensaje);
-  //console.log(mensaje);
-  if ( typeof port !== 'undefined') {
-    port.write(mensaje);
-    read();
-  } else {
-    console.log("No hay dispositivo al que enviarle los datos.");
-  }
-  res.status(204).send();
+io.on('connection', function(socket){
+  socket.on('update', function(msg){
+    var color = hexToHSL(msg.color);
+    var data = [msg.secuencia, msg.brillo,msg.velocidad,color.h.toFixed(2),color.s.toFixed(2),color.l.toFixed(2)];var mensaje = data.join();
+    console.log("Enviando mensaje...");
+    if ( typeof port !== 'undefined') {
+      port.write(mensaje);
+      read();
+      console.log("Mensaje enviado")
+    } else {
+      console.log("No hay dispositivo al que enviarle los datos.");
+    }
+  });
 });
