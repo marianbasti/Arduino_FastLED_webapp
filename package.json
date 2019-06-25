@@ -427,6 +427,7 @@
       "version": "5.7.0"
     },
     "serialport": "^7.1.5",
+    "serve-favicon": "^2.5.0",
     "set-blocking": {
       "integrity": "sha1-BF+XgtARrppoA93TgrJDkrPYkPc=",
       "resolved": "https://registry.npmjs.org/set-blocking/-/set-blocking-2.0.0.tgz",
