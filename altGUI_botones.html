@@ -95,6 +95,26 @@
       background: #5600a1;
     }
 
+    .myButton {
+      width: 30%;
+      height: 10%;
+    	background-color:#650773;
+    	-moz-border-radius:3px;
+    	-webkit-border-radius:3px;
+    	border-radius:3px;
+    	border:1px solid #ecffe3;
+    	display:inline-block;
+    	cursor:pointer;
+    	color:#ffffff;
+    	font-family:Arial;
+    	font-size:20px;
+    	padding:10px 10px;
+    	text-decoration:none;
+    }
+    .myButton:active {
+    	position:relative;
+    	top:1px;
+    }
 
 
       img {
@@ -116,10 +136,11 @@
       }
       div {background-color: transparent;}
 
-      .opciones {padding-top: 25px; padding-bottom: 50px; vertical-align: middle;}
+      .opciones {padding-top: 25px; padding-bottom: 25px; vertical-align: middle;}
 
       .formulario {
         text-align: center;
+        height: 100%;
       }
       .descripcion {vertical-align: middle;}
       .sender {
@@ -206,16 +227,15 @@
 
     <form id="form" method="post" class="formulario">
       <div id="0" class="opciones">
-      <select id="secuencia">
-        <option value="1">Color sólido</option>
-        <option value="2">Estrobo</option>
-        <option value="3">Estrobo alternado</option>
-        <option value="4">Confetti</option>
-        <option value="5">Fuego</option>
-        <option value="6">Ondas</option>
-        <option value="7">Arcoiris</option>
-        <option value="8">Gotas</option>
-      </select>
+      <a value="1" class="myButton" onclick="sec(1)">Sólido</a>
+      <a value="2" class="myButton" onclick="sec(2)">Estrobo</a>
+      <a value="3" class="myButton" onclick="sec(3)">Estrobo2</a>
+      <a value="4" class="myButton" onclick="sec(4)">Confetti</a>
+      <a value="5" class="myButton" onclick="sec(5)">Fuego</a>
+      <a value="6" class="myButton" onclick="sec(6)">Ondas</a>
+      <a value="7" class="myButton" onclick="sec(7)">Arcoiris</a>
+      <a value="8" class="myButton" onclick="sec(8)">Gotas</a>
+      <input id="secuencia" hidden="true"></input>
       </div>
       <div id="1" class="opciones">
         <div class="descripcion">
@@ -276,6 +296,10 @@
       return false;
     });
   });
+
+  function sec(i) {
+    document.getElementById("secuencia").value = i;
+  }
 
   /* Set the width of the side navigation to 250px and the left margin of the page content to 250px */
   function openNav() {

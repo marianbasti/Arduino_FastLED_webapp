@@ -110,7 +110,7 @@ app.post('/log', function (req, res) {
     //Should encrypt this
     if (req.body.log == 'colores') {
       console.log("Successful log");
-      res.cookie('logged', 'true', { maxAge: 900000, httpOnly: false });
+      res.cookie('logged', 'true', { maxAge: 21600000, httpOnly: false });
       res.redirect(req.get('referer'));
     } else {
       console.log('Failed login attempt: ' + req.body.log);
@@ -126,8 +126,8 @@ app.post('/log', function (req, res) {
 app.get('/acercade', function (req, res) {
   res.sendFile(__dirname + '/acercade.html');
 });
-app.get('/altGUI_botones', function (req, res) {
-  res.sendFile(__dirname + '/altGUI_1.html');
+app.get('/altGUI_1', function (req, res) {
+  res.sendFile(__dirname + '/altGUI_botones.html');
 });
 
 app.get('/background-image.png', function (req, res) {
