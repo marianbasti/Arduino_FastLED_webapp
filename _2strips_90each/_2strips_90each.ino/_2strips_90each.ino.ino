@@ -105,7 +105,7 @@ void loop() {
 // SPARKING: What chance (out of 255) is there that a new spark will be lit?
 // Higher chance = more roaring fire.  Lower chance = more flickery fire.
 // Default 120, suggested range 50-200.
-#define SPARKING 80
+#define SPARKING 100
 
 
 void Fire2012WithPalette(int h, int s)

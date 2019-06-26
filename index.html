@@ -101,6 +101,8 @@
       background: #5600a1;
     }
 
+    
+
 
 
       img {
@@ -238,6 +240,12 @@
         <input type="range" name="velocidad" value="Velocidad" id="velinid" min="1" max="50" step="1" onchange="veloutid.value = velinid.value"/>
         <output name="vel" id="veloutid">25</output>
       </div>
+      <div class="opciones">
+        <input id="live" type="checkbox" name="live" value="1"><br>
+      </div>
+      <div id="footer">
+        <button type='submit' id='pw' class="sender">Actualizar</button>
+      </div>
     </form>
   </body>
 
@@ -277,6 +285,14 @@
   $(function () {
     var socket = io();
     $('form').change(function(e){
+      if (document.getElementById("live").checked) {
+        e.preventDefault(); // prevents page reloading
+        var data = {secuencia: $('#secuencia').val(), brillo: $('#brilloin').val(), velocidad: $('#velinid').val(), color: $('#color').val() }
+        socket.emit('update', data);
+        return false;
+      }
+    });
+    $('form').submit(function(e){
       e.preventDefault(); // prevents page reloading
       var data = {secuencia: $('#secuencia').val(), brillo: $('#brilloin').val(), velocidad: $('#velinid').val(), color: $('#color').val() }
       socket.emit('update', data);
