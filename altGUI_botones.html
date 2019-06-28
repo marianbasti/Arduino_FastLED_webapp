@@ -8,10 +8,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <style>
 
+    .myButton {
+      width: 30%;
+      height: 8vh;
+    	background-color:#650773;
+    	-moz-border-radius:3px;
+    	-webkit-border-radius:3px;
+    	border-radius:3px;
+    	border:1px solid #ecffe3;
+    	display:inline-block;
+    	cursor:pointer;
+    	color:#ffffff;
+    	font-family:Arial;
+    	font-size:3vh;
+    	padding:1.5vh 1vh;
+    	text-decoration:none;
+    }
+    .myButton:active {
+    	position:relative;
+    	top:1px;
+    }
+
     input[type=range] {
       -webkit-appearance: none;
       width: 80%;
-      margin: 3.3px 0;
+      margin: 0px;
       background-color: transparent;
     }
     input[type=range]:focus {
@@ -19,7 +40,7 @@
     }
     input[type=range]::-webkit-slider-runnable-track {
       width: 100%;
-      height: 15px;
+      height: 2.5vh;
       cursor: pointer;
       box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
       background: #30005a;
@@ -29,20 +50,20 @@
     input[type=range]::-webkit-slider-thumb {
       box-shadow: 4.3px 4.3px 4.3px #000000, 0px 0px 4.3px #0d0d0d;
       border: 1.6px solid #000000;
-      height: 20px;
-      width: 30px;
+      height: 3.5vh;
+      width: 5.5vh;
       border-radius: 29px;
       background: #ffffff;
       cursor: pointer;
       -webkit-appearance: none;
-      margin-top: -3.5px;
+      margin-top: -0.5vh;
     }
     input[type=range]:focus::-webkit-slider-runnable-track {
       background: #5600a1;
     }
     input[type=range]::-moz-range-track {
       width: 100%;
-      height: 10px;
+      height: 2.5vh;
       cursor: pointer;
       box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
       background: #30005a;
@@ -52,15 +73,15 @@
     input[type=range]::-moz-range-thumb {
       box-shadow: 4.3px 4.3px 4.3px #000000, 0px 0px 4.3px #0d0d0d;
       border: 1.6px solid #000000;
-      height: 15px;
-      width: 21px;
+      height: 3.5vh;
+      width: 5.5vh;
       border-radius: 29px;
       background: #ffffff;
       cursor: pointer;
     }
     input[type=range]::-ms-track {
       width: 100%;
-      height: 10px;
+      height: 2.5vh;
       cursor: pointer;
       background: transparent;
       border-color: transparent;
@@ -81,8 +102,8 @@
     input[type=range]::-ms-thumb {
       box-shadow: 4.3px 4.3px 4.3px #000000, 0px 0px 4.3px #0d0d0d;
       border: 1.6px solid #000000;
-      height: 15px;
-      width: 21px;
+      height: 3.5vh;
+      width: 5.5vh;
       border-radius: 29px;
       background: #ffffff;
       cursor: pointer;
@@ -95,119 +116,112 @@
       background: #5600a1;
     }
 
-    .myButton {
-      width: 30%;
+    img {
+      max-width: 100%;
+    }
+    html {
+      color: white;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font: 13px Helvetica, Arial; background-color: #000000; background-image:url("../background-image.png"); background-repeat: no-repeat; background-position: center; background-size: contain;}
+    form select { background: #30005a; color: #ffffff; padding: 10px; width: 85%; margin-right: .5%; font-size: 3vh}
+    form input { border: 0; padding: 0px; width: 85%; margin-right: .5%; vertical-align: middle;}
+    form button { width: 9%; background: rgb(130, 224, 255); position: absolute; bottom: 0px; border: none; padding: 100px; }
+    input[type="range"] {
+      width:80%;
+      vertical-align: middle;
+    }
+    div {background-color: transparent;}
+
+    .opciones {
+      height: 20vh;
+      padding: 0px;
+      vertical-align: middle;
+      font-size: 2vh;
+    }
+
+    .formulario {
+      text-align: center;
+      height: 100%;
+      padding-top: 3vh;;
+    }
+
+    .descripcion {vertical-align: middle;}
+
+    .sender {
+      width:100%;
+      height:10%;
+      background-color: #404040;
+      border: none;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+    }
+
+    .checklive {
+      width: 10%;
       height: 10%;
-    	background-color:#650773;
-    	-moz-border-radius:3px;
-    	-webkit-border-radius:3px;
-    	border-radius:3px;
-    	border:1px solid #ecffe3;
-    	display:inline-block;
-    	cursor:pointer;
-    	color:#ffffff;
-    	font-family:Arial;
-    	font-size:20px;
-    	padding:10px 10px;
-    	text-decoration:none;
-    }
-    .myButton:active {
-    	position:relative;
-    	top:1px;
+      position: fixed;
+      bottom: 10%;
+      right: 1%;
     }
 
+    /* The side navigation menu */
+    .sidenav {
+      height: 100%; /* 100% Full-height */
+      width: 0; /* 0 width - change this with JavaScript */
+      position: fixed; /* Stay in place */
+      z-index: 1; /* Stay on top */
+      top: 0; /* Stay at the top */
+      left: 0;
+      background-color: #111; /* Black*/
+      overflow-x: hidden; /* Disable horizontal scroll */
+      padding-top: 60px; /* Place content 60px from the top */
+      transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+    }
 
-      img {
-        max-width: 100%;
-      }
-      html {
+    /* The navigation menu links */
+    .sidenav a {
+      padding: 8px 8px 8px 5vh;
+      text-decoration: none;
+      font-size: 5vh;
+      color: #818181;
+      display: block;
+      transition: 0.3s;
+    }
 
-        color: white;
-      }
-      * { margin: 0; padding: 0; box-sizing: border-box; }
-      body { font: 13px Helvetica, Arial; background-color: #000000; background-image:url("../background-image.png"); background-repeat: no-repeat; background-position: center; background-size: contain;}
-      form {max-height: 90%; background: transparent; padding: 0px; top: 0; width: 100%;}
-      form select { background: #30005a; color: #ffffff; padding: 10px; width: 85%; margin-right: .5%;}
-      form input { border: 0; padding: 10px; width: 85%; margin-right: .5%; }
-      form button { width: 9%; background: rgb(130, 224, 255); position: absolute; bottom: 0px; border: none; padding: 100px; }
-      input[type="range"] {
-        width:80%;
-        vertical-align: middle;
-      }
-      div {background-color: transparent;}
+    /* When you mouse over the navigation links, change their color */
+    .sidenav a:hover {
+      color: #f1f1f1;
+    }
 
-      .opciones {padding-top: 25px; padding-bottom: 25px; vertical-align: middle;}
+    /* Position and style the close button (top right corner) */
+    .sidenav .closebtn {
+      position: absolute;
+      top: 0;
+      right: 3vh;
+      font-size: 7vh;
+      margin-left: 50px;
+    }
 
-      .formulario {
-        text-align: center;
-        height: 100%;
-      }
-      .descripcion {vertical-align: middle;}
-      .sender {
-        width:100%;
-        height:10%;
-        background-color: #404040;
-        border: none;
-        color: white;
-        padding: 15px 32px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-        position: absolute;
-        bottom: 0;
-        left: 0;
-      }
+    /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+    #main {
+      transition: margin-left .5s;
+      padding: 20px;
+    }
 
-      /* The side navigation menu */
-      .sidenav {
-        height: 100%; /* 100% Full-height */
-        width: 0; /* 0 width - change this with JavaScript */
-        position: fixed; /* Stay in place */
-        z-index: 1; /* Stay on top */
-        top: 0; /* Stay at the top */
-        left: 0;
-        background-color: #111; /* Black*/
-        overflow-x: hidden; /* Disable horizontal scroll */
-        padding-top: 60px; /* Place content 60px from the top */
-        transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
-      }
-
-      /* The navigation menu links */
-      .sidenav a {
-        padding: 8px 8px 8px 32px;
-        text-decoration: none;
-        font-size: 25px;
-        color: #818181;
-        display: block;
-        transition: 0.3s;
-      }
-
-      /* When you mouse over the navigation links, change their color */
-      .sidenav a:hover {
-        color: #f1f1f1;
-      }
-
-      /* Position and style the close button (top right corner) */
-      .sidenav .closebtn {
-        position: absolute;
-        top: 0;
-        right: 25px;
-        font-size: 36px;
-        margin-left: 50px;
-      }
-
-      /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
-      #main {
-        transition: margin-left .5s;
-        padding: 20px;
-      }
-
-      /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
-      @media screen and (max-height: 450px) {
-        .sidenav {padding-top: 15px;}
-        .sidenav a {font-size: 18px;}
-      }
+    /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+    @media screen and (max-height: 450px) {
+      .sidenav {padding-top: 15px;}
+      .sidenav a {font-size: 18px;}
+    }
 
     </style>
   </head>
@@ -226,7 +240,7 @@
     </span>
 
     <form id="form" method="post" class="formulario">
-      <div id="0" class="opciones">
+      <div id="0" style="margin: 2vh">
       <a value="1" class="myButton" onclick="sec(1)">Sólido</a>
       <a value="2" class="myButton" onclick="sec(2)">Estrobo</a>
       <a value="3" class="myButton" onclick="sec(3)">Estrobo2</a>
