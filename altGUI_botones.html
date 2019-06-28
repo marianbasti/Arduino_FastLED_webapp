@@ -295,6 +295,12 @@
       socket.emit('update', data);
       return false;
     });
+    document.getElementById("0").onclick = function(e){
+      e.preventDefault(); // prevents page reloading
+      var data = {secuencia: $('#secuencia').val(), brillo: $('#brilloin').val(), velocidad: $('#velinid').val(), color: $('#color').val() }
+      socket.emit('update', data);
+      return false;
+    };
   });
 
   function sec(i) {

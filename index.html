@@ -13,110 +13,104 @@
     <title>Control LEDs</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <style>
-
-    input[type=range] {
-      -webkit-appearance: none;
-      width: 80%;
-      margin: 3.3px 0;
-      background-color: transparent;
-    }
-    input[type=range]:focus {
-      outline: none;
-    }
-    input[type=range]::-webkit-slider-runnable-track {
-      width: 100%;
-      height: 15px;
-      cursor: pointer;
-      box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
-      background: #30005a;
-      border-radius: 1.3px;
-      border: 0.2px solid #010101;
-    }
-    input[type=range]::-webkit-slider-thumb {
-      box-shadow: 4.3px 4.3px 4.3px #000000, 0px 0px 4.3px #0d0d0d;
-      border: 1.6px solid #000000;
-      height: 20px;
-      width: 30px;
-      border-radius: 29px;
-      background: #ffffff;
-      cursor: pointer;
-      -webkit-appearance: none;
-      margin-top: -3.5px;
-    }
-    input[type=range]:focus::-webkit-slider-runnable-track {
-      background: #5600a1;
-    }
-    input[type=range]::-moz-range-track {
-      width: 100%;
-      height: 10px;
-      cursor: pointer;
-      box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
-      background: #30005a;
-      border-radius: 1.3px;
-      border: 0.2px solid #010101;
-    }
-    input[type=range]::-moz-range-thumb {
-      box-shadow: 4.3px 4.3px 4.3px #000000, 0px 0px 4.3px #0d0d0d;
-      border: 1.6px solid #000000;
-      height: 15px;
-      width: 21px;
-      border-radius: 29px;
-      background: #ffffff;
-      cursor: pointer;
-    }
-    input[type=range]::-ms-track {
-      width: 100%;
-      height: 10px;
-      cursor: pointer;
-      background: transparent;
-      border-color: transparent;
-      color: transparent;
-    }
-    input[type=range]::-ms-fill-lower {
-      background: #0a0013;
-      border: 0.2px solid #010101;
-      border-radius: 2.6px;
-      box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
-    }
-    input[type=range]::-ms-fill-upper {
-      background: #30005a;
-      border: 0.2px solid #010101;
-      border-radius: 2.6px;
-      box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
-    }
-    input[type=range]::-ms-thumb {
-      box-shadow: 4.3px 4.3px 4.3px #000000, 0px 0px 4.3px #0d0d0d;
-      border: 1.6px solid #000000;
-      height: 15px;
-      width: 21px;
-      border-radius: 29px;
-      background: #ffffff;
-      cursor: pointer;
-      height: 8.4px;
-    }
-    input[type=range]:focus::-ms-fill-lower {
-      background: #30005a;
-    }
-    input[type=range]:focus::-ms-fill-upper {
-      background: #5600a1;
-    }
-
-    
-
-
+      input[type=range] {
+        -webkit-appearance: none;
+        width: 80%;
+        margin: 0px;
+        background-color: transparent;
+      }
+      input[type=range]:focus {
+        outline: none;
+      }
+      input[type=range]::-webkit-slider-runnable-track {
+        width: 100%;
+        height: 2.5vh;
+        cursor: pointer;
+        box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
+        background: #30005a;
+        border-radius: 1.3px;
+        border: 0.2px solid #010101;
+      }
+      input[type=range]::-webkit-slider-thumb {
+        box-shadow: 4.3px 4.3px 4.3px #000000, 0px 0px 4.3px #0d0d0d;
+        border: 1.6px solid #000000;
+        height: 3.5vh;
+        width: 5.5vh;
+        border-radius: 29px;
+        background: #ffffff;
+        cursor: pointer;
+        -webkit-appearance: none;
+        margin-top: -0.5vh;
+      }
+      input[type=range]:focus::-webkit-slider-runnable-track {
+        background: #5600a1;
+      }
+      input[type=range]::-moz-range-track {
+        width: 100%;
+        height: 2.5vh;
+        cursor: pointer;
+        box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
+        background: #30005a;
+        border-radius: 1.3px;
+        border: 0.2px solid #010101;
+      }
+      input[type=range]::-moz-range-thumb {
+        box-shadow: 4.3px 4.3px 4.3px #000000, 0px 0px 4.3px #0d0d0d;
+        border: 1.6px solid #000000;
+        height: 3.5vh;
+        width: 5.5vh;
+        border-radius: 29px;
+        background: #ffffff;
+        cursor: pointer;
+      }
+      input[type=range]::-ms-track {
+        width: 100%;
+        height: 2.5vh;
+        cursor: pointer;
+        background: transparent;
+        border-color: transparent;
+        color: transparent;
+      }
+      input[type=range]::-ms-fill-lower {
+        background: #0a0013;
+        border: 0.2px solid #010101;
+        border-radius: 2.6px;
+        box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
+      }
+      input[type=range]::-ms-fill-upper {
+        background: #30005a;
+        border: 0.2px solid #010101;
+        border-radius: 2.6px;
+        box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
+      }
+      input[type=range]::-ms-thumb {
+        box-shadow: 4.3px 4.3px 4.3px #000000, 0px 0px 4.3px #0d0d0d;
+        border: 1.6px solid #000000;
+        height: 3.5vh;
+        width: 5.5vh;
+        border-radius: 29px;
+        background: #ffffff;
+        cursor: pointer;
+        height: 8.4px;
+      }
+      input[type=range]:focus::-ms-fill-lower {
+        background: #30005a;
+      }
+      input[type=range]:focus::-ms-fill-upper {
+        background: #5600a1;
+      }
 
       img {
         max-width: 100%;
       }
       html {
-
         color: white;
       }
+
       * { margin: 0; padding: 0; box-sizing: border-box; }
       body { font: 13px Helvetica, Arial; background-color: #000000; background-image:url("../background-image.png"); background-repeat: no-repeat; background-position: center; background-size: contain;}
-      form {max-height: 90%; background: transparent; padding: 0px; top: 0; width: 100%;}
-      form select { background: #30005a; color: #ffffff; padding: 10px; width: 85%; margin-right: .5%;}
-      form input { border: 0; padding: 10px; width: 85%; margin-right: .5%; }
+      form select { background: #30005a; color: #ffffff; padding: 10px; width: 85%; margin-right: .5%; font-size: 3vh}
+      form input { border: 0; padding: 0px; width: 85%; margin-right: .5%; vertical-align: middle;}
       form button { width: 9%; background: rgb(130, 224, 255); position: absolute; bottom: 0px; border: none; padding: 100px; }
       input[type="range"] {
         width:80%;
@@ -124,13 +118,21 @@
       }
       div {background-color: transparent;}
 
-      .opciones {padding-top: 25px; padding-bottom: 50px; vertical-align: middle;}
+      .opciones {
+        height: 20vh;
+        padding: 0px;
+        vertical-align: middle;
+        font-size: 2vh;
+      }
 
       .formulario {
         text-align: center;
         height: 100%;
+        padding-top: 3vh;;
       }
+
       .descripcion {vertical-align: middle;}
+
       .sender {
         width:100%;
         height:10%;
@@ -142,9 +144,17 @@
         text-decoration: none;
         display: inline-block;
         font-size: 16px;
-        position: absolute;
+        position: fixed;
         bottom: 0;
         left: 0;
+      }
+
+      .checklive {
+        width: 10%;
+        height: 10%;
+        position: fixed;
+        bottom: 10%;
+        right: 1%;
       }
 
       /* The side navigation menu */
@@ -163,9 +173,9 @@
 
       /* The navigation menu links */
       .sidenav a {
-        padding: 8px 8px 8px 32px;
+        padding: 8px 8px 8px 5vh;
         text-decoration: none;
-        font-size: 25px;
+        font-size: 5vh;
         color: #818181;
         display: block;
         transition: 0.3s;
@@ -180,8 +190,8 @@
       .sidenav .closebtn {
         position: absolute;
         top: 0;
-        right: 25px;
-        font-size: 36px;
+        right: 3vh;
+        font-size: 7vh;
         margin-left: 50px;
       }
 
@@ -208,9 +218,10 @@
       <a href="/acercade">Acerca de</a>
     </div>
 
+
     <!-- Use any element to open the sidenav -->
     <span onclick="openNav()">
-            <img src="/threelines.png" alt="sidenav" width="50px" height="40px">
+            <img src="/threelines.png" alt="sidenav" width="50vh" height="40vh">
     </span>
 
     <form id="form" class="formulario">
@@ -240,10 +251,8 @@
         <input type="range" name="velocidad" value="Velocidad" id="velinid" min="1" max="50" step="1" onchange="veloutid.value = velinid.value"/>
         <output name="vel" id="veloutid">25</output>
       </div>
-      <div class="opciones">
-        <input id="live" type="checkbox" name="live" value="1"><br>
-      </div>
       <div id="footer">
+        <input id="live" class="checklive" type="checkbox" name="live" value="1" onchange="document.getElementById('pw').disabled = this.checked;" align="left"><br>
         <button type='submit' id='pw' class="sender">Actualizar</button>
       </div>
     </form>
@@ -302,7 +311,7 @@
 
   /* Set the width of the side navigation to 250px and the left margin of the page content to 250px */
   function openNav() {
-    document.getElementById("mySidenav").style.width = "250px";
+    document.getElementById("mySidenav").style.width = "60%";
     //document.getElementById("main").style.marginLeft = "250px";
   }
 
