@@ -8,7 +8,7 @@
 
 bool gReverseDirection = false;
 bool isOn = false;
-bool alt = false;
+int alt = 0;
 String data;
 int secuencia = 0;
 int bpm = 100;
@@ -86,9 +86,12 @@ void loop() {
       sinelon(bpm);
       break;
     case 7:
-      rainbow();
+      sinelon2(bpm);
       break;
     case 8:
+      rainbow();
+      break;
+    case 9:
       sweep(h, s, l);
       break;
   }
@@ -155,8 +158,8 @@ void confetti(int h, int s)
   int pos = random16(NUM_LEDS);
   int hue = beatsin16( h, 0, 80 );
   int sat = beatsin16( h, 100, 20 );
-  leds[0][pos] += CHSV(h+hue-40, 80 + sat, 255);
-  leds[1][pos] += CHSV(h+hue-40, 80 + sat, 255);
+  leds[0][pos] += CHSV(h + hue - 40, 80 + sat, 255);
+  leds[1][pos] += CHSV(h + hue - 40, 80 + sat, 255);
 }
 
 void strobe(int bpm, int s, int l) {
@@ -166,7 +169,7 @@ void strobe(int bpm, int s, int l) {
       leds[1][i] = CHSV(h, s, l);
     }
     isOn = true;
-    delay((2000/bpm)+1);
+    delay((2000 / bpm) + 1);
 
   } else {
     for (int i = 0; i < NUM_LEDS; i++) {
@@ -181,19 +184,24 @@ void strobe(int bpm, int s, int l) {
 
 void strobe_alternate(int bpm, int s, int l) {
   if (isOn == false ) {
-    if (alt == true) {
+    if (alt == 0 || alt == 1) {
       for (int i = 0; i < NUM_LEDS; i++) {
         leds[0][i] = CHSV(h, s, l);
       }
-      alt = false;
+      alt++;
+    } else if ( alt == 2) {
+      for (int i = 0; i < NUM_LEDS; i++) {
+        leds[1][i] = CHSV(h, s, l);
+      }
+      alt++;
     } else {
       for (int i = 0; i < NUM_LEDS; i++) {
         leds[1][i] = CHSV(h, s, l);
       }
-      alt = true;
+      alt = 0;
     }
     isOn = true;
-    delay((2000/bpm)+1);
+    delay((2000 / bpm) + 1);
 
   } else {
     for (int i = 0; i < NUM_LEDS; i++) {
@@ -209,10 +217,25 @@ void sinelon(int bpm)
   // a colored dot sweeping back and forth, with fading trails
   fadeToBlackBy( leds[0], NUM_LEDS, 50);
   fadeToBlackBy( leds[1], NUM_LEDS, 50);
-  int pos0 = beatsin16( bpm / 5, 0, NUM_LEDS - 1 );
-  int pos1 = beatsin16( bpm / 5, 0, NUM_LEDS - 1 );
+  int pos0 = beatsin16( bpm / 2, 0, NUM_LEDS - 1 );
+  int pos1 = beatsin16( bpm / 2, 0, NUM_LEDS - 1 );
   leds[0][pos0] += CHSV( pos0 * 10, 255, 192);
   leds[1][pos1] += CHSV( pos0 * 10, 255, 192);
+}
+
+void sinelon2(int bpm)
+{
+  // 2 colored dots sweeping back and forth, with fading trails
+  fadeToBlackBy( leds[0], NUM_LEDS, 50);
+  fadeToBlackBy( leds[1], NUM_LEDS, 50);
+  int pos0 = beatsin16( bpm / 2, 0, NUM_LEDS - 1 );
+  int pos1 = beatsin16( bpm / 2, 0, NUM_LEDS - 1 );
+  int pos2 = beatsin16( bpm / 3, 0, NUM_LEDS - 1 );
+  int pos3 = beatsin16( bpm / 3, 0, NUM_LEDS - 1 );
+  leds[0][pos0] += CHSV( pos0 * 10, 255, 192);
+  leds[1][pos1] += CHSV( pos0 * 10, 255, 192);
+  leds[0][pos2] += CHSV( pos0 * 10, 255, 192);
+  leds[1][pos3] += CHSV( pos0 * 10, 255, 192);
 }
 
 void rainbow()
@@ -238,15 +261,9 @@ void secuenciaEncendido() {
 }
 
 void sweep(int h, int s, int l) {
-  for (int i = 0; i < NUM_LEDS*1.5; i++) {
-    if (i<NUM_LEDS) {
-      leds[0][i] = CHSV(h, s, l);
-    }
-    if (i-NUM_LEDS/2<0) {
-      leds[1][i-(NUM_LEDS/2)] = CHSV(h, s, l);
-    }
-    fadeToBlackBy(leds[0], NUM_LEDS, 80);
-    fadeToBlackBy(leds[1], NUM_LEDS, 80);
-    delay(30);
-  }
+  leds[0][millis()/53%NUM_LEDS] += CHSV(h, s, l); 
+  leds[1][(millis()/53+(NUM_LEDS/2))%NUM_LEDS] += CHSV(h, s, l);
+  fadeToBlackBy(leds[0], NUM_LEDS, 50);
+  fadeToBlackBy(leds[1], NUM_LEDS, 50);
+  delay(30);
 }
