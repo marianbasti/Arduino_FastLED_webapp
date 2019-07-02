@@ -1,0 +1,357 @@
+<!doctype html>
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#240034">
+<meta name="msapplication-TileColor" content="#603cba">
+<meta name="theme-color" content="#240034">
+
+<html lang="es" dir="ltr">
+  <head>
+    <title>Control LEDs</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <style>
+      input[type=range] {
+        -webkit-appearance: none;
+        width: 80%;
+        margin: 0px;
+        background-color: transparent;
+      }
+      input[type=range]:focus {
+        outline: none;
+      }
+      input[type=range]::-webkit-slider-runnable-track {
+        width: 100%;
+        height: 2.5vh;
+        cursor: pointer;
+        box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
+        background: #30005a;
+        border-radius: 1.3px;
+        border: 0.2px solid #010101;
+      }
+      input[type=range]::-webkit-slider-thumb {
+        box-shadow: 4.3px 4.3px 4.3px #000000, 0px 0px 4.3px #0d0d0d;
+        border: 1.6px solid #000000;
+        height: 3.5vh;
+        width: 5.5vh;
+        border-radius: 29px;
+        background: #ffffff;
+        cursor: pointer;
+        -webkit-appearance: none;
+        margin-top: -0.5vh;
+      }
+      input[type=range]:focus::-webkit-slider-runnable-track {
+        background: #5600a1;
+      }
+      input[type=range]::-moz-range-track {
+        width: 100%;
+        height: 2.5vh;
+        cursor: pointer;
+        box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
+        background: #30005a;
+        border-radius: 1.3px;
+        border: 0.2px solid #010101;
+      }
+      input[type=range]::-moz-range-thumb {
+        box-shadow: 4.3px 4.3px 4.3px #000000, 0px 0px 4.3px #0d0d0d;
+        border: 1.6px solid #000000;
+        height: 3.5vh;
+        width: 5.5vh;
+        border-radius: 29px;
+        background: #ffffff;
+        cursor: pointer;
+      }
+      input[type=range]::-ms-track {
+        width: 100%;
+        height: 2.5vh;
+        cursor: pointer;
+        background: transparent;
+        border-color: transparent;
+        color: transparent;
+      }
+      input[type=range]::-ms-fill-lower {
+        background: #0a0013;
+        border: 0.2px solid #010101;
+        border-radius: 2.6px;
+        box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
+      }
+      input[type=range]::-ms-fill-upper {
+        background: #30005a;
+        border: 0.2px solid #010101;
+        border-radius: 2.6px;
+        box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
+      }
+      input[type=range]::-ms-thumb {
+        box-shadow: 4.3px 4.3px 4.3px #000000, 0px 0px 4.3px #0d0d0d;
+        border: 1.6px solid #000000;
+        height: 3.5vh;
+        width: 5.5vh;
+        border-radius: 29px;
+        background: #ffffff;
+        cursor: pointer;
+        height: 8.4px;
+      }
+      input[type=range]:focus::-ms-fill-lower {
+        background: #30005a;
+      }
+      input[type=range]:focus::-ms-fill-upper {
+        background: #5600a1;
+      }
+
+      img {
+        max-width: 100%;
+      }
+      html {
+        color: white;
+      }
+
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font: 13px Helvetica, Arial; background-color: #000000; background-image:url("../background-image.png"); background-repeat: no-repeat; background-position: center; background-size: contain;}
+      form select { background: #30005a; color: #ffffff; padding: 10px; width: 85%; margin-right: .5%; font-size: 3vh}
+      table, td {
+          border: 0.5vh solid white;
+          border-collapse: collapse;
+      }
+      td {
+        height: 5vh;
+        width: 5vh;
+      }
+      table {
+        width: 80%;
+        padding: 5vh;
+      }
+      form input { border: 0; padding: 0px; width: 85%; margin-right: .5%; vertical-align: middle;}
+      form button { width: 9%; background: rgb(130, 224, 255); position: absolute; bottom: 0px; border: none; padding: 100px; }
+      input[type="range"] {
+        width:80%;
+        vertical-align: middle;
+      }
+      div {background-color: transparent;}
+
+      .opciones {
+        height: 20vh;
+        padding: 0px;
+        vertical-align: middle;
+        font-size: 2vh;
+      }
+
+      .formulario {
+        text-align: center;
+        height: 100%;
+        padding-top: 3vh;;
+      }
+
+      .descripcion {vertical-align: middle;}
+
+      .sender {
+        width:100%;
+        height:10%;
+        background-color: #404040;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+      }
+
+      .checklive {
+        width: 10%;
+        height: 10%;
+        position: fixed;
+        bottom: 10%;
+        right: 1%;
+      }
+
+      /* The side navigation menu */
+      .sidenav {
+        height: 100%; /* 100% Full-height */
+        width: 0; /* 0 width - change this with JavaScript */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Stay on top */
+        top: 0; /* Stay at the top */
+        left: 0;
+        background-color: #111; /* Black*/
+        overflow-x: hidden; /* Disable horizontal scroll */
+        padding-top: 60px; /* Place content 60px from the top */
+        transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+      }
+
+      /* The navigation menu links */
+      .sidenav a {
+        padding: 8px 8px 8px 5vh;
+        text-decoration: none;
+        font-size: 5vh;
+        color: #818181;
+        display: block;
+        transition: 0.3s;
+      }
+
+      /* When you mouse over the navigation links, change their color */
+      .sidenav a:hover {
+        color: #f1f1f1;
+      }
+
+      /* Position and style the close button (top right corner) */
+      .sidenav .closebtn {
+        position: absolute;
+        top: 0;
+        right: 3vh;
+        font-size: 7vh;
+        margin-left: 50px;
+      }
+
+      /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+      #main {
+        transition: margin-left .5s;
+        padding: 20px;
+      }
+
+      /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+      @media screen and (max-height: 450px) {
+        .sidenav {padding-top: 15px;}
+        .sidenav a {font-size: 18px;}
+      }
+
+    </style>
+  </head>
+  <body>
+
+    <div id="mySidenav" class="sidenav">
+      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+      <a>Inicio</a>
+      <a href="/altGUI_1">Alt</a>
+      <a href="/acercade">Acerca de</a>
+    </div>
+
+
+    <!-- Use any element to open the sidenav -->
+    <span onclick="openNav()">
+            <img src="/threelines.png" alt="sidenav" width="50vh" height="40vh">
+    </span>
+
+    <form id="form" class="formulario">
+      <div id="0" class="opciones">
+        <table>
+          <tr>
+            <td>Tira</td>
+            <td>1</td>
+            <td>2</td>
+            <td>3</td>
+            <td>4</td>
+          </tr>
+          <tr onchange="">
+            <td>1</td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+          </tr>
+          <tr>
+            <td>2</th>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+          </tr>
+          <tr>
+            <td>3</th>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+          </tr>
+          <tr>
+            <td>4</th>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+          </tr>
+        </table>
+      </div>
+      <div id="2" class="opciones">Brillo
+        <input type="range" name="brillo" value="Brillo" id="brilloin" min="0" max="100" step="1" onchange="brilloout.value = brilloin.value"/>
+        <output name="br" id="brilloout">50</output>
+      </div>
+      <div id="3" class="opciones">BPM
+        <input type="range" name="velocidad" value="Velocidad" id="velinid" min="1" max="50" step="1" onchange="veloutid.value = velinid.value"/>
+        <output name="vel" id="veloutid">25</output>
+      </div>
+      <div id="footer">
+        <input id="live" class="checklive" type="checkbox" name="live" value="1" onchange="document.getElementById('pw').disabled = this.checked;" align="left"><br>
+        <button type='submit' id='pw' class="sender">Actualizar</button>
+      </div>
+    </form>
+  </body>
+
+  <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+
+
+  <script type="text/javascript">
+
+  //Funcion para crear dinamicamente un elemento para enviar la contraseña ingresada al server
+  function log(params) {
+    const form = document.createElement('form');
+    form.method = "post";
+    form.action = "/log";
+    const hiddenField = document.createElement('input');
+    hiddenField.type = 'hidden';
+    hiddenField.name = "log";
+    hiddenField.value = params;
+    form.appendChild(hiddenField);
+    document.body.appendChild(form);
+    form.submit();
+    document.removeElement('input');
+    document.removeElement('form');
+  }
+
+  //Veo la cookie
+  var galletita = document.cookie.split(";");
+  //Si no esta logueado, prompt para ingresar la contraseña
+  for (var i = 0; i<galletita.length; i++) {
+    if (galletita != "logged=true") {
+      var pass = prompt("Contraseña:");
+      log(pass);
+    } else if (galletita == "logged=true") { //Si lo esta, habilitar el boton
+    }
+  }
+  $(function () {
+    var socket = io();
+    $('form').change(function(e){
+      if (document.getElementById("live").checked) {
+        e.preventDefault(); // prevents page reloading
+        var data = {secuencia: $('#secuencia').val(), brillo: $('#brilloin').val(), velocidad: $('#velinid').val(), color: $('#color').val() }
+        socket.emit('update', data);
+        return false;
+      }
+    });
+    $('form').submit(function(e){
+      e.preventDefault(); // prevents page reloading
+      var data = {secuencia: $('#secuencia').val(), brillo: $('#brilloin').val(), velocidad: $('#velinid').val(), color: $('#color').val() }
+      socket.emit('update', data);
+      return false;
+    });
+  });
+
+  /* Set the width of the side navigation to 250px and the left margin of the page content to 250px */
+  function openNav() {
+    document.getElementById("mySidenav").style.width = "60%";
+    //document.getElementById("main").style.marginLeft = "250px";
+  }
+
+  /* Set the width of the side navigation to 0 and the left margin of the page content to 0 */
+  function closeNav() {
+    document.getElementById("mySidenav").style.width = "0";
+    //document.getElementById("main").style.marginLeft = "0";
+  }
+
+  </script>

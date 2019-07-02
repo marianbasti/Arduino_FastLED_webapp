@@ -8,7 +8,7 @@
 
 bool gReverseDirection = false;
 bool isOn = false;
-bool alt = false;
+int alt = 0;
 String data;
 int secuencia = 0;
 int bpm = 100;
@@ -89,9 +89,12 @@ void loop() {
       sinelon(bpm);
       break;
     case 7:
-      rainbow();
+      sinelon2(bpm, h);
       break;
     case 8:
+      rainbow();
+      break;
+    case 9:
       sweep(h, s, l);
       break;
   }
@@ -189,18 +192,27 @@ void strobe(int bpm, int s, int l) {
 
 void strobe_alternate(int bpm, int s, int l) {
   if (isOn == false ) {
-    if (alt == true) {
+    if (alt == 0 || alt == 1) {
       for (int j = 0; j < NUM_LEDS; j++) {
-        for (int i = 0; i<STRIPS;i++) {
+        for (int i = 0; i<STRIPS/2;i++) {
           leds[i][j] = CHSV(h, s, l);
         }
       }
-      alt = false;
-    } else {
-      for (int i = 0; i < NUM_LEDS; i++) {
-        leds[1][i] = CHSV(h, s, l);
+      alt++;
+    } else if (alt == 2) {
+      for (int j = 0; j < NUM_LEDS; j++) {
+        for (int i = STRIPS/2; i<STRIPS;i++) {
+          leds[i][j] = CHSV(h, s, l);
+        }
       }
-      alt = true;
+      alt++;
+    } else {
+      for (int j = 0; j < NUM_LEDS; j++) {
+        for (int i = STRIPS/2; i<STRIPS;i++) {
+          leds[i][j] = CHSV(h, s, l);
+        }
+      }
+      alt = 0;
     }
     isOn = true;
     delay((2000/bpm)+1);
@@ -226,6 +238,17 @@ void sinelon(int bpm)
   for (int i = 0; i<STRIPS;i++) {
     leds[i][pos1] += CHSV( pos0 * 10, 255, 192);
   }
+}
+
+void sinelon2(int bpm, int h)
+{
+  // 2 colored dots sweeping back and forth, with fading trails
+  fadeToBlackBy( leds[0], NUM_LEDS, 50);
+  fadeToBlackBy( leds[1], NUM_LEDS, 50);
+  int pos[STRIPS] = {beatsin16( bpm / 2, 0, NUM_LEDS - 1 ),beatsin16( bpm / 3, 0, NUM_LEDS - 1 ),beatsin16( bpm / 4, 0, NUM_LEDS - 1 ),beatsin16( bpm / 5, 0, NUM_LEDS - 1 )};
+  for (int i = 0; i<STRIPS;i++) {
+    leds[i][pos[i]] += CHSV( map(pos[i], 0, NUM_LEDS, -10, 10) + h, 255, 192);
+  };
 }
 
 void rainbow()

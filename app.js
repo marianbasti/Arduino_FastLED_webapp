@@ -109,6 +109,9 @@ app.get('/acercade', function (req, res) {
 app.get('/altGUI_1', function (req, res) {
   res.sendFile(__dirname + '/altGUI_botones.html');
 });
+app.get('/strobe', function (req, res) {
+  res.sendFile(__dirname + '/strobe.html');
+});
 app.get('/background-image.png', function (req, res) {
   res.sendFile(__dirname + '/background-image.png');
 });
