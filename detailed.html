@@ -225,7 +225,7 @@
 
     <div id="mySidenav" class="sidenav">
       <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-      <a>Inicio</a>
+      <a href="/">Inicio</a>
       <a href="/altGUI_1">Alt</a>
       <a href="/acercade">Acerca de</a>
     </div>
@@ -246,35 +246,20 @@
             <td>3</td>
             <td>4</td>
           </tr>
-          <tr onchange="">
+          <tr>
             <td>1</td>
-            <td><input type="checkbox"></td>
-            <td><input type="checkbox"></td>
-            <td><input type="checkbox"></td>
-            <td><input type="checkbox"></td>
-          </tr>
-          <tr>
-            <td>2</th>
-            <td><input type="checkbox"></td>
-            <td><input type="checkbox"></td>
-            <td><input type="checkbox"></td>
-            <td><input type="checkbox"></td>
-          </tr>
-          <tr>
-            <td>3</th>
-            <td><input type="checkbox"></td>
-            <td><input type="checkbox"></td>
-            <td><input type="checkbox"></td>
-            <td><input type="checkbox"></td>
-          </tr>
-          <tr>
-            <td>4</th>
-            <td><input type="checkbox"></td>
-            <td><input type="checkbox"></td>
-            <td><input type="checkbox"></td>
-            <td><input type="checkbox"></td>
+            <td><input id="l1" type="checkbox" onchange="setStrips()"></td>
+            <td><input id="l2" type="checkbox" onchange="setStrips()"></td>
+            <td><input id="l3" type="checkbox" onchange="setStrips()"></td>
+            <td><input id="l4" type="checkbox" onchange="setStrips()"></td>
           </tr>
         </table>
+      <div id="1" class="opciones">
+        <div class="descripcion">
+          Color
+        </div>
+        <input id="color" type="color" value="#ff0000"/>
+      </div>
       </div>
       <div id="2" class="opciones">Brillo
         <input type="range" name="brillo" value="Brillo" id="brilloin" min="0" max="100" step="1" onchange="brilloout.value = brilloin.value"/>
@@ -285,7 +270,6 @@
         <output name="vel" id="veloutid">25</output>
       </div>
       <div id="footer">
-        <input id="live" class="checklive" type="checkbox" name="live" value="1" onchange="document.getElementById('pw').disabled = this.checked;" align="left"><br>
         <button type='submit' id='pw' class="sender">Actualizar</button>
       </div>
     </form>
@@ -293,8 +277,6 @@
 
   <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
   <script src="/socket.io/socket.io.js"></script>
-  <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
-
 
   <script type="text/javascript">
 
@@ -316,6 +298,7 @@
 
   //Veo la cookie
   var galletita = document.cookie.split(";");
+  var strips = 0;
   //Si no esta logueado, prompt para ingresar la contraseña
   for (var i = 0; i<galletita.length; i++) {
     if (galletita != "logged=true") {
@@ -326,21 +309,29 @@
   }
   $(function () {
     var socket = io();
-    $('form').change(function(e){
-      if (document.getElementById("live").checked) {
-        e.preventDefault(); // prevents page reloading
-        var data = {secuencia: $('#secuencia').val(), brillo: $('#brilloin').val(), velocidad: $('#velinid').val(), color: $('#color').val() }
-        socket.emit('update', data);
-        return false;
-      }
-    });
     $('form').submit(function(e){
       e.preventDefault(); // prevents page reloading
-      var data = {secuencia: $('#secuencia').val(), brillo: $('#brilloin').val(), velocidad: $('#velinid').val(), color: $('#color').val() }
+      var data = {secuencia: strips, brillo: $('#brilloin').val(), velocidad: $('#velinid').val(), color: $('#color').val() }
       socket.emit('update', data);
       return false;
     });
   });
+
+  function setStrips() {
+    strips = 0;
+    if(document.getElementById("l1").checked == true) {
+      strips += 1;
+    }
+    if(document.getElementById("l2").checked == true) {
+      strips += 2;
+    }
+    if(document.getElementById("l3").checked == true) {
+      strips += 4;
+    }
+    if(document.getElementById("l4").checked == true) {
+      strips += 8;
+    }
+  }
 
   /* Set the width of the side navigation to 250px and the left margin of the page content to 250px */
   function openNav() {
