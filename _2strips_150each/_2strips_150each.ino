@@ -223,17 +223,19 @@ void strobe_alternate2() {
         leds[1][i] = CHSV(h, s, l);
       }
       alt++;
-    } else if ( alt == 2) {
+    } else if ( alt == 1) {
       for (int i = NUM_LEDS/3; i < (NUM_LEDS*2)/3; i++) {
         leds[0][i] = CHSV(h, s, l);
         leds[1][i] = CHSV(h, s, l);
       }
       alt++;
-    } else {
+    } else if ( alt == 2) {
       for (int i = (NUM_LEDS*2)/3; i < NUM_LEDS; i++) {
         leds[0][i] = CHSV(h, s, l);
         leds[1][i] = CHSV(h, s, l);
       }
+      alt++;
+    } else {
       alt = 0;
     }
     isOn = true;
@@ -255,9 +257,8 @@ void sinelon()
   fadeToBlackBy( leds[0], NUM_LEDS, 50);
   fadeToBlackBy( leds[1], NUM_LEDS, 50);
   int pos0 = beatsin16( bpm / 2, 0, NUM_LEDS - 1 );
-  int pos1 = beatsin16( bpm / 2, 0, NUM_LEDS - 1 );
-  leds[0][pos0] += CHSV( pos0 * 10, 255, 192);
-  leds[1][pos1] += CHSV( pos0 * 10, 255, 192);
+  leds[0][pos0] += CHSV( h + map(pos0, 0, NUM_LEDS, -50, 50), 255, 192);
+  leds[1][pos0] += CHSV( h + map(pos0, 0, NUM_LEDS, -50, 50), 255, 192);
 }
 
 void sinelon2()
