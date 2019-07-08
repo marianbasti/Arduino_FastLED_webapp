@@ -115,6 +115,9 @@ app.get('/detailed', function (req, res) {
 app.get('/background-image.png', function (req, res) {
   res.sendFile(__dirname + '/background-image.png');
 });
+app.get('/preloader.gif', function (req, res) {
+  res.sendFile(__dirname + '/preloader.gif');
+});
 app.get('/threelines.png', function (req, res) {
   res.sendFile(__dirname + '/threelines.png');
 });
