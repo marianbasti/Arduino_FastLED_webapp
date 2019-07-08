@@ -12,7 +12,7 @@ int alt = 0;
 String data;
 int secuencia = 0;
 int bpm = 100;
-int brillo;
+int brillo, brillodiff, smoothbrillo;
 int temp;
 double h;
 double s;
@@ -60,7 +60,11 @@ void loop() {
     l = map(temp, 0, 100, 0, 255);
   }
 
-  FastLED.setBrightness( brillo );
+  if (brillo != smoothbrillo) {
+    FastLED.setBrightness( smoothbrillo );
+    brillodiff = brillo - smoothbrillo;
+    smoothbrillo += brillodiff*0.1;
+  }
 
   switch (secuencia) {
     case 0:
