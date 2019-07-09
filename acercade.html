@@ -89,8 +89,8 @@
   <body>
     <div id="mySidenav" class="sidenav">
       <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-      <a href="/">Inicio</a>
-      <a href="/altGUI_1">Alt</a>
+      <a id="inicio">Inicio</a>
+      <a id="altGUI">Alt</a>
       <a>Acerca de</a>
     </div>
 
@@ -126,5 +126,24 @@
       document.getElementById("mySidenav").style.width = "0";
       //document.getElementById("main").style.marginLeft = "0";
     }
+
+    $("#inicio").on("click", function() {
+      $(".preloader").fadeIn("slow");
+      $("#body").fadeIn("slow");
+      $(document).ready(function() {
+        $("#body").load("./");
+        $(".preloader").fadeOut("slow");
+      });
+    });
+      
+    $("#alt").on("click", function() {
+      $(".preloader").fadeIn("slow");
+      $("#body").fadeIn("slow");
+      $(document).ready(function() {
+        $("#body").load("./altGUI_1");
+        $(".preloader").fadeOut("slow");
+      });
+    });
+
   </script>
 </html>
