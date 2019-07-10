@@ -333,18 +333,16 @@
 
   $("#alt").on("click", function() {
     $(".preloader").fadeIn("slow");
-    $("#body").fadeIn("slow");
+    $("#body").load("./altGUI_1");
     $(document).ready(function() {
-      $("#body").load("./altGUI_1");
       $(".preloader").fadeOut("slow");
     });
   });
 
   $("#acercade").on("click", function() {
     $(".preloader").fadeIn("slow");
-    $("#body").fadeIn("slow");
+    $("#body").load("./acercade");
     $(document).ready(function() {
-      $("#body").load("./acercade");
       $(".preloader").fadeOut("slow");
     });
   });
@@ -354,4 +352,4 @@
     $(".preloader").fadeOut("slow");
   });
 
-  </script>
+</script>

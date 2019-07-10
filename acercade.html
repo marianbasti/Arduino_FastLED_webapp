@@ -114,36 +114,41 @@
       <p>Teléfono: <a href="tel:+542944240425"><i>(294)424-0425)</i></a></p>
     </div>
   </body>
-  <script type="text/javascript">
-    /* Set the width of the side navigation to 250px and the left margin of the page content to 250px */
-    function openNav() {
-      document.getElementById("mySidenav").style.width = "50vh";
-      //document.getElementById("main").style.marginLeft = "250px";
-    }
-
-    /* Set the width of the side navigation to 0 and the left margin of the page content to 0 */
-    function closeNav() {
-      document.getElementById("mySidenav").style.width = "0";
-      //document.getElementById("main").style.marginLeft = "0";
-    }
-
-    $("#inicio").on("click", function() {
-      $(".preloader").fadeIn("slow");
-      $("#body").fadeIn("slow");
-      $(document).ready(function() {
-        $("#body").load("./");
-        $(".preloader").fadeOut("slow");
-      });
-    });
-
-    $("#alt").on("click", function() {
-      $(".preloader").fadeIn("slow");
-      $("#body").fadeIn("slow");
-      $(document).ready(function() {
-        $("#body").load("./altGUI_1");
-        $(".preloader").fadeOut("slow");
-      });
-    });
-
-  </script>
 </html>
+
+
+<script type="text/javascript">
+  /* Set the width of the side navigation to 250px and the left margin of the page content to 250px */
+  function openNav() {
+    document.getElementById("mySidenav").style.width = "50vh";
+    //document.getElementById("main").style.marginLeft = "250px";
+  }
+
+  /* Set the width of the side navigation to 0 and the left margin of the page content to 0 */
+  function closeNav() {
+    document.getElementById("mySidenav").style.width = "0";
+    //document.getElementById("main").style.marginLeft = "0";
+  }
+
+  $("#inicio").on("click", function() {
+    $(".preloader").fadeIn("slow");
+    $("#body").load("./");
+    $(document).ready(function() {
+      $(".preloader").fadeOut("slow");
+    });
+  });
+
+  $("#alt").on("click", function() {
+    $(".preloader").fadeIn("slow");
+    $("#body").load("./altGUI_1");
+    $(document).ready(function() {
+      $(".preloader").fadeOut("slow");
+    });
+  });
+
+  $(document).ready(function() {
+    // document is loaded and DOM is ready
+    $(".preloader").fadeOut("slow");
+  });
+
+</script>
