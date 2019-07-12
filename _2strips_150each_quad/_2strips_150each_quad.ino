@@ -96,7 +96,7 @@ void loop() {
       sinelon2();
       break;
     case 9:
-      rainbow();
+      sinelon();
       break;
     case 10:
       sweep();
