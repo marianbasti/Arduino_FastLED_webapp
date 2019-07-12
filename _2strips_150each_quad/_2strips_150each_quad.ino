@@ -110,7 +110,7 @@ void loop() {
 
 }
 
-#define COOLING  55
+#define COOLING  95
 
 // SPARKING: What chance (out of 255) is there that a new spark will be lit?
 // Higher chance = more roaring fire.  Lower chance = more flickery fire.
@@ -153,8 +153,8 @@ void Fire2012WithPalette()
     }
     leds[0][pixelnumber+NUM_LEDS/2] = color;
     leds[1][pixelnumber+NUM_LEDS/2] = color;
-    leds[0][-pixelnumber+NUM_LEDS/2+1] = color;
-    leds[1][-pixelnumber+NUM_LEDS/2+1] = color;
+    leds[0][-pixelnumber+NUM_LEDS/2-1] = color;
+    leds[1][-pixelnumber+NUM_LEDS/2-1] = color;
   }
 }
 
@@ -297,14 +297,9 @@ void sinelon2()
 
 void rainbow() {
   for (int i = 0; i < NUM_LEDS; i++) {
-    leds[0][i] = CHSV(h, s, l);
-    leds[1][i] = CHSV(h, s, l);
-    delay((2000 / bpm) + 1);
-  }
-  for (int i = NUM_LEDS-1; i > 0; i--) {
     leds[0][i] = CRGB::Black;
     leds[1][i] = CRGB::Black;
-    delay((2000 / bpm) + 1);
+    delay(100);
   }
 }
 
