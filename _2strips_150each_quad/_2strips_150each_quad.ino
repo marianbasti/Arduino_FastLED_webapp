@@ -299,7 +299,7 @@ void rainbow() {
   for (int i = 0; i < NUM_LEDS; i++) {
     leds[0][i] = CRGB::Black;
     leds[1][i] = CRGB::Black;
-    delay(100);
+
   }
 }
 
@@ -314,6 +314,7 @@ void secuenciaEncendido() {
   for (int i = 0; i < NUM_LEDS; i++) {
     leds[0][i] = CRGB::White;
     leds[1][i] = CRGB::White;
+    FastLED.show(); // display this frame
     delay(100);
   }
 }
