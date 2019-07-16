@@ -4,7 +4,7 @@ var http = require('http').createServer(app);
 var io = require('socket.io')(http);
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
-var Gpio = require('pigpio').Gpio, //include pigpio to interact with the GPIO
+var Gpio = require('pigpio').Gpio; //include pigpio to interact with the GPIO
 var fs = require('fs'); //require filesystem module
 var port;
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -107,12 +107,12 @@ function hexToHSL(hex) {
   return HSL;
 }
 
-function hexToRgb(hex) {
+function hexToRgb(hex,brillo) {
   var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result ? {
-    r: parseInt(result[1], 16),
-    g: parseInt(result[2], 16),
-    b: parseInt(result[3], 16)
+    r: parseInt(result[1], 16)*(brillo/100),
+    g: parseInt(result[2], 16)*(brillo/100),
+    b: parseInt(result[3], 16)*(brillo/100)
   } : null;
 }
 
@@ -202,10 +202,19 @@ io.on('connection', function(socket){
   });
 
   socket.on('updateRGB', function(msg){
-    var color = hexToRgb(msg.color);
-    ledRed1.pwmWrite(color.r); //set RED LED to specified value
-    ledGreen1.pwmWrite(color.g); //set GREEN LED to specified value
-    ledBlue1.pwmWrite(color.b); //set BLUE LED to specified value
+    var color = hexToRgb(msg.color,msg.brill);
+    switch (msg.secuencia) {
+      case "1":
+        console.log(msg);
+        ledRed1.pwmWrite(color.r.toFixed(0)); //set RED LED to specified value
+        ledGreen1.pwmWrite(color.g.toFixed(0)); //set GREEN LED to specified value
+        ledBlue1.pwmWrite(color.b.toFixed(0)); //set BLUE LED to specified value
+        break;
+      case "2":
+        console.log(msg);
+
+        break;
+    }
 
   });
 });
