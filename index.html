@@ -225,6 +225,7 @@
       <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
       <a>Inicio</a>
       <a id="alt">Alt</a>
+      <a id="RGB">RGB</a>
       <a id="acercade">Acerca de</a>
     </div>
 
@@ -334,6 +335,14 @@
   $("#alt").on("click", function() {
     $(".preloader").fadeIn("slow");
     $("#body").load("./altGUI_1");
+    $(document).ready(function() {
+      $(".preloader").fadeOut("slow");
+    });
+  });
+
+  $("#RGB").on("click", function() {
+    $(".preloader").fadeIn("slow");
+    $("#body").load("./RGB");
     $(document).ready(function() {
       $(".preloader").fadeOut("slow");
     });

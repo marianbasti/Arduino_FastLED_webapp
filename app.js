@@ -4,10 +4,20 @@ var http = require('http').createServer(app);
 var io = require('socket.io')(http);
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
+var Gpio = require('pigpio').Gpio, //include pigpio to interact with the GPIO
+var fs = require('fs'); //require filesystem module
 var port;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static('public'));
+
+ledRed1 = new Gpio(2, {mode: Gpio.OUTPUT}), //use GPIO pin 4 as output for RED
+ledGreen1 = new Gpio(3, {mode: Gpio.OUTPUT}), //use GPIO pin 17 as output for GREEN
+ledBlue1 = new Gpio(4, {mode: Gpio.OUTPUT}), //use GPIO pin 27 as output for BLUE
+//RESET RGB LED
+ledRed1.digitalWrite(1); // Turn RED LED off
+ledGreen1.digitalWrite(1); // Turn GREEN LED off
+ledBlue1.digitalWrite(1); // Turn BLUE LED off
 
 //Crear puerto serie
 const SerialPort = require('serialport')
@@ -97,6 +107,14 @@ function hexToHSL(hex) {
   return HSL;
 }
 
+function hexToRgb(hex) {
+  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result ? {
+    r: parseInt(result[1], 16),
+    g: parseInt(result[2], 16),
+    b: parseInt(result[3], 16)
+  } : null;
+}
 
 
 //Express
@@ -108,6 +126,9 @@ app.get('/acercade', function (req, res) {
 });
 app.get('/altGUI_1', function (req, res) {
   res.sendFile(__dirname + '/altGUI_botones.html');
+});
+app.get('/RGB', function (req, res) {
+  res.sendFile(__dirname + '/RGB.html');
 });
 app.get('/detailed', function (req, res) {
   res.sendFile(__dirname + '/detailed.html');
@@ -177,6 +198,14 @@ io.on('connection', function(socket){
       console.log("Mensaje enviado")
     } else {
       console.log("No hay dispositivo al que enviarle los datos.");
-    }
+    };
+  });
+
+  socket.on('updateRGB', function(msg){
+    var color = hexToRgb(msg.color);
+    ledRed1.pwmWrite(color.r); //set RED LED to specified value
+    ledGreen1.pwmWrite(color.g); //set GREEN LED to specified value
+    ledBlue1.pwmWrite(color.b); //set BLUE LED to specified value
+
   });
 });
