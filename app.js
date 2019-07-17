@@ -7,6 +7,7 @@ var cookieParser = require('cookie-parser');
 var Gpio = require('pigpio').Gpio; //include pigpio to interact with the GPIO
 var fs = require('fs'); //require filesystem module
 var port;
+var intervalo;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static('public'));
@@ -202,19 +203,58 @@ io.on('connection', function(socket){
   });
 
   socket.on('updateRGB', function(msg){
-    var color = hexToRgb(msg.color,msg.brill);
+    var color = hexToRgb(msg.color,msg.brillo);
+    var milis = msg.velocidad*16.66;
+    console.log(msg);
     switch (msg.secuencia) {
-      case "1":
-        console.log(msg);
+      case 1:
         ledRed1.pwmWrite(color.r.toFixed(0)); //set RED LED to specified value
         ledGreen1.pwmWrite(color.g.toFixed(0)); //set GREEN LED to specified value
         ledBlue1.pwmWrite(color.b.toFixed(0)); //set BLUE LED to specified value
         break;
-      case "2":
-        console.log(msg);
-
+      case 2:
+        strobe(color,milis);
         break;
-    }
+      case 3:
 
+    };
   });
 });
+
+function strobe(color,time) {
+  clearInterval(intervalo);
+  setOff();
+  function setOff(){
+    intervalo = setInterval(function() {
+      setTimeout(function(){
+        ledRed1.pwmWrite(0); //set RED LED to specified value
+        ledGreen1.pwmWrite(0); //set GREEN LED to specified value
+        ledBlue1.pwmWrite(0); //set BLUE LED to specified value
+      }, 10);
+      setTimeout(function(){
+        ledRed1.pwmWrite(color.r.toFixed(0)); //set RED LED to specified value
+        ledGreen1.pwmWrite(color.g.toFixed(0)); //set GREEN LED to specified value
+        ledBlue1.pwmWrite(color.b.toFixed(0)); //set BLUE LED to specified value
+      }, time-10)
+    }, time);
+  }
+}
+
+function pulse(color,time) {
+  clearInterval(intervalo);
+  setOff();
+  function setOff(){
+    intervalo = setInterval(function() {
+      setTimeout(function(){
+        ledRed1.pwmWrite(0); //set RED LED to specified value
+        ledGreen1.pwmWrite(0); //set GREEN LED to specified value
+        ledBlue1.pwmWrite(0); //set BLUE LED to specified value
+      }, 10);
+      setTimeout(function(){
+        ledRed1.pwmWrite(color.r.toFixed(0)); //set RED LED to specified value
+        ledGreen1.pwmWrite(color.g.toFixed(0)); //set GREEN LED to specified value
+        ledBlue1.pwmWrite(color.b.toFixed(0)); //set BLUE LED to specified value
+      }, time-10)
+    }, time);
+  }
+}
