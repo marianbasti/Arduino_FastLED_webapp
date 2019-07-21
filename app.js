@@ -8,6 +8,7 @@ var Gpio = require('pigpio').Gpio; //include pigpio to interact with the GPIO
 var fs = require('fs'); //require filesystem module
 var port;
 var intervalo;
+var date = new Date();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static('public'));
@@ -15,10 +16,53 @@ app.use(express.static('public'));
 ledRed1 = new Gpio(2, {mode: Gpio.OUTPUT}), //use GPIO pin 4 as output for RED
 ledGreen1 = new Gpio(3, {mode: Gpio.OUTPUT}), //use GPIO pin 17 as output for GREEN
 ledBlue1 = new Gpio(4, {mode: Gpio.OUTPUT}), //use GPIO pin 27 as output for BLUE
+ledRed2 = new Gpio(17, {mode: Gpio.OUTPUT}), //use GPIO pin 4 as output for RED
+ledGreen2 = new Gpio(27, {mode: Gpio.OUTPUT}), //use GPIO pin 17 as output for GREEN
+ledBlue2 = new Gpio(22, {mode: Gpio.OUTPUT}), //use GPIO pin 27 as output for BLUE
+ledRed3 = new Gpio(10, {mode: Gpio.OUTPUT}), //use GPIO pin 4 as output for RED
+ledGreen3 = new Gpio(9, {mode: Gpio.OUTPUT}), //use GPIO pin 17 as output for GREEN
+ledBlue3 = new Gpio(11, {mode: Gpio.OUTPUT}), //use GPIO pin 27 as output for BLUE
+ledRed4 = new Gpio(5, {mode: Gpio.OUTPUT}), //use GPIO pin 4 as output for RED
+ledGreen4 = new Gpio(6, {mode: Gpio.OUTPUT}), //use GPIO pin 17 as output for GREEN
+ledBlue4 = new Gpio(12, {mode: Gpio.OUTPUT}), //use GPIO pin 27 as output for BLUEledRed1 = new Gpio(2, {mode: Gpio.OUTPUT}), //use GPIO pin 4 as output for RED
+ledRed5 = new Gpio(13, {mode: Gpio.OUTPUT}), //use GPIO pin 4 as output for RED
+ledGreen5 = new Gpio(19, {mode: Gpio.OUTPUT}), //use GPIO pin 17 as output for GREEN
+ledBlue5 = new Gpio(26, {mode: Gpio.OUTPUT}), //use GPIO pin 27 as output for BLUE
+ledRed6 = new Gpio(16, {mode: Gpio.OUTPUT}), //use GPIO pin 4 as output for RED
+ledGreen6 = new Gpio(20, {mode: Gpio.OUTPUT}), //use GPIO pin 17 as output for GREEN
+ledBlue6 = new Gpio(21, {mode: Gpio.OUTPUT}), //use GPIO pin 27 as output for BLUE
+ledRed7 = new Gpio(8, {mode: Gpio.OUTPUT}), //use GPIO pin 4 as output for RED
+ledGreen7 = new Gpio(7, {mode: Gpio.OUTPUT}), //use GPIO pin 17 as output for GREEN
+ledBlue7 = new Gpio(12, {mode: Gpio.OUTPUT}), //use GPIO pin 27 as output for BLUE
+ledRed8 = new Gpio(23, {mode: Gpio.OUTPUT}), //use GPIO pin 4 as output for RED
+ledGreen8 = new Gpio(24, {mode: Gpio.OUTPUT}), //use GPIO pin 17 as output for GREEN
+ledBlue8 = new Gpio(25, {mode: Gpio.OUTPUT}), //use GPIO pin 27 as output for BLUEledRed1 = new Gpio(2, {mode: Gpio.OUTPUT}), //use GPIO pin 4 as output for RED
+
 //RESET RGB LED
-ledRed1.digitalWrite(1); // Turn RED LED off
-ledGreen1.digitalWrite(1); // Turn GREEN LED off
-ledBlue1.digitalWrite(1); // Turn BLUE LED off
+ledRed1.digitalWrite(0); // Turn RED LED off
+ledGreen1.digitalWrite(0); // Turn GREEN LED off
+ledBlue1.digitalWrite(0); // Turn BLUE LED off
+ledRed2.digitalWrite(0); // Turn RED LED off
+ledGreen2.digitalWrite(0); // Turn GREEN LED off
+ledBlue2.digitalWrite(0); // Turn BLUE LED off
+ledRed3.digitalWrite(0); // Turn RED LED off
+ledGreen3.digitalWrite(0); // Turn GREEN LED off
+ledBlue3.digitalWrite(0); // Turn BLUE LED off
+ledRed4.digitalWrite(0); // Turn RED LED off
+ledGreen4.digitalWrite(0); // Turn GREEN LED off
+ledBlue4.digitalWrite(0); // Turn BLUE LED off
+ledRed5.digitalWrite(0); // Turn RED LED off
+ledGreen5.digitalWrite(0); // Turn GREEN LED off
+ledBlue5.digitalWrite(0); // Turn BLUE LED off
+ledRed6.digitalWrite(0); // Turn RED LED off
+ledGreen6.digitalWrite(0); // Turn GREEN LED off
+ledBlue6.digitalWrite(0); // Turn BLUE LED off
+ledRed7.digitalWrite(0); // Turn RED LED off
+ledGreen7.digitalWrite(0); // Turn GREEN LED off
+ledBlue7.digitalWrite(0); // Turn BLUE LED off
+ledRed8.digitalWrite(0); // Turn RED LED off
+ledGreen8.digitalWrite(0); // Turn GREEN LED off
+ledBlue8.digitalWrite(0); // Turn BLUE LED off
 
 //Crear puerto serie
 const SerialPort = require('serialport')
@@ -37,7 +81,7 @@ SerialPort.list(function (err, results) {
       //Busco productId del Arduino Micro
       while (results[i].productId != 8037){
         i++;
-        if (i == 10) {
+        if (i == results.length) {
           console.log("Controlador no encontrado.");
           comPort = "undefined";
           throw err;
@@ -204,57 +248,67 @@ io.on('connection', function(socket){
 
   socket.on('updateRGB', function(msg){
     var color = hexToRgb(msg.color,msg.brillo);
-    var milis = msg.velocidad*16.66;
+    var milis = 60000/msg.velocidad;
     console.log(msg);
+    clearInterval(intervalo);
     switch (msg.secuencia) {
-      case 1:
+      case "1":
         ledRed1.pwmWrite(color.r.toFixed(0)); //set RED LED to specified value
         ledGreen1.pwmWrite(color.g.toFixed(0)); //set GREEN LED to specified value
         ledBlue1.pwmWrite(color.b.toFixed(0)); //set BLUE LED to specified value
         break;
-      case 2:
+      case "2":
         strobe(color,milis);
         break;
-      case 3:
-
+      case "3":
+        pulse(color,milis);
+      case "4":
+        strobe2(color,milis);
     };
   });
 });
 
 function strobe(color,time) {
-  clearInterval(intervalo);
-  setOff();
-  function setOff(){
-    intervalo = setInterval(function() {
-      setTimeout(function(){
+  intervalo = setInterval(function() {
+    setTimeout(function() {
         ledRed1.pwmWrite(0); //set RED LED to specified value
         ledGreen1.pwmWrite(0); //set GREEN LED to specified value
         ledBlue1.pwmWrite(0); //set BLUE LED to specified value
-      }, 10);
+    }, 10)
+    setTimeout(function(){
+      ledRed1.pwmWrite(color.r.toFixed(0)); //set RED LED to specified value
+      ledGreen1.pwmWrite(color.g.toFixed(0)); //set GREEN LED to specified value
+      ledBlue1.pwmWrite(color.b.toFixed(0)); //set BLUE LED to specified value
+    }, time-10)
+  }, time);
+
+}
+
+function strobe2(color,time) {
+  intervalo = setInterval(function() {
+    setInterval(function() {
+      setTimeout(function() {
+          ledRed1.pwmWrite(0); //set RED LED to specified value
+          ledGreen1.pwmWrite(0); //set GREEN LED to specified value
+          ledBlue1.pwmWrite(0); //set BLUE LED to specified value
+      }, time/10);
       setTimeout(function(){
-        ledRed1.pwmWrite(color.r.toFixed(0)); //set RED LED to specified value
-        ledGreen1.pwmWrite(color.g.toFixed(0)); //set GREEN LED to specified value
-        ledBlue1.pwmWrite(color.b.toFixed(0)); //set BLUE LED to specified value
-      }, time-10)
-    }, time);
-  }
+          ledRed1.pwmWrite(color.r.toFixed(0)); //set RED LED to specified value
+          ledGreen1.pwmWrite(color.g.toFixed(0)); //set GREEN LED to specified value
+          ledBlue1.pwmWrite(color.b.toFixed(0)); //set BLUE LED to specified value
+      }, time/10);
+    }, time/2);
+  }, time);
 }
 
 function pulse(color,time) {
   clearInterval(intervalo);
-  setOff();
-  function setOff(){
-    intervalo = setInterval(function() {
-      setTimeout(function(){
-        ledRed1.pwmWrite(0); //set RED LED to specified value
-        ledGreen1.pwmWrite(0); //set GREEN LED to specified value
-        ledBlue1.pwmWrite(0); //set BLUE LED to specified value
-      }, 10);
-      setTimeout(function(){
-        ledRed1.pwmWrite(color.r.toFixed(0)); //set RED LED to specified value
-        ledGreen1.pwmWrite(color.g.toFixed(0)); //set GREEN LED to specified value
-        ledBlue1.pwmWrite(color.b.toFixed(0)); //set BLUE LED to specified value
-      }, time-10)
-    }, time);
-  }
+  var pulsebrillo;
+  intervalo = setInterval(function() {
+    var date = new Date();
+    pulsebrillo = -Math.abs(Math.sin(date.getTime()/time*2))+1;
+    ledRed1.pwmWrite((color.r*pulsebrillo).toFixed(0)); //set RED LED to specified value
+    ledGreen1.pwmWrite((color.g*pulsebrillo).toFixed(0)); //set GREEN LED to specified value
+    ledBlue1.pwmWrite((color.b*pulsebrillo).toFixed(0)); //set BLUE LED to specified value
+  }, 5);
 }
