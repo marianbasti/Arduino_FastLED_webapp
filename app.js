@@ -9,6 +9,8 @@ var fs = require('fs'); //require filesystem module
 var port;
 var intervalo;
 var date = new Date();
+var easymidi = require('easymidi');
+var input = new easymidi.Input('USB MIDI Classic 49:USB MIDI Classic 49 MIDI 1 20:0');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static('public'));
@@ -228,6 +230,10 @@ app.post('/log', function (req, res) {
 
 http.listen(4000, function () {
   console.log('Server corriendo en puerto 4000, bien hecho!');
+});
+
+input.on('noteon', function (msg) {
+  console.log(msg);
 });
 
 //QUE HAGO CUANDO EL CLIENTE POSTEA
