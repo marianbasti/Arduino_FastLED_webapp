@@ -11,6 +11,14 @@ var intervalo;
 var date = new Date();
 var easymidi = require('easymidi');
 var input = new easymidi.Input('USB MIDI Classic 49:USB MIDI Classic 49 MIDI 1 20:0');
+var colorMIDI = {
+  m: 0,
+  r: 0,
+  g: 0,
+  b: 0,
+  s: 0,
+  e: 0
+}
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static('public'));
@@ -232,8 +240,34 @@ http.listen(4000, function () {
   console.log('Server corriendo en puerto 4000, bien hecho!');
 });
 
-input.on('noteon', function (msg) {
+//Controlador MIDI. Asumo los CC, cuando los conozca reemplazo
+input.on('cc', function (msg) {
   console.log(msg);
+  if (msg.comtroller == 1) {
+    colorMIDI.m = msg.value/127;
+  }
+  switch(msg.controller) {
+    case '2':
+      colorMIDI.r = (msg.value*2)*colorMIDI.m;
+      break;
+    case '3';
+      colorMIDI.g = (msg.value*2)*colorMIDI.m;
+      break;
+    case '4';
+      colorMIDI.b = (msg.value*2)*colorMIDI.m;
+      break;
+    case '5';
+      colorMIDI.s = msg.value;
+      break;
+    case '6';
+      colorMIDI.e = msg.value;
+      break;
+  }
+  if (colorMIDI.s < 1) {
+    solid(colorMIDI);
+  } else {
+    strobe(colorMIDI,1/colorMIDI.s)
+  }
 });
 
 //QUE HAGO CUANDO EL CLIENTE POSTEA
