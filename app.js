@@ -242,25 +242,44 @@ http.listen(4000, function () {
 
 //Controlador MIDI. Asumo los CC, cuando los conozca reemplazo
 input.on('cc', function (msg) {
-  console.log(msg);
-  if (msg.comtroller == 1) {
+  clearInterval(intervalo);
+  if (msg.controller == '82') {
     colorMIDI.m = msg.value/127;
   }
   switch(msg.controller) {
-    case '2':
-      colorMIDI.r = (msg.value*2)*colorMIDI.m;
+    case 83:
+      colorMIDI.r = msg.value*2*colorMIDI.m;
+      console.log(colorMIDI.r);
       break;
-    case '3';
-      colorMIDI.g = (msg.value*2)*colorMIDI.m;
+    case 28:
+      colorMIDI.g = msg.value*2*colorMIDI.m;
       break;
-    case '4';
-      colorMIDI.b = (msg.value*2)*colorMIDI.m;
+    case 29:
+      colorMIDI.b = msg.value*2*colorMIDI.m;
       break;
-    case '5';
+    case 16:
       colorMIDI.s = msg.value;
       break;
-    case '6';
-      colorMIDI.e = msg.value;
+    case 80:
+      colorMIDI.e = (msg.value/5).toFixed(0);
+      break;
+  }
+
+  switch(colorMIDI.e) {
+    case 0:
+      solid(colorMIDI);
+      break;
+    case 1:
+      pulse(colorMIDI,milis);
+      break;
+    case 2:
+      pulseSweep(colorMIDI,milis);
+      break;
+    case 3:
+      rainbow(colorMIDI,milis);
+      break;
+    case 4:
+      rando(colorMIDI,milis);
       break;
   }
   if (colorMIDI.s < 1) {
@@ -306,6 +325,9 @@ io.on('connection', function(socket){
         break;
       case "5":
         rainbow(color,milis);
+        break;
+      case "6":
+        rando(color,milis);
         break;
     };
   });
@@ -507,4 +529,246 @@ function solid(color) {
   ledRed8.pwmWrite(color.r.toFixed(0));
   ledGreen8.pwmWrite(color.g.toFixed(0));
   ledBlue8.pwmWrite(color.b.toFixed(0));
+}
+
+function rando(color,milis) {
+  intervalo = setInterval(function() {
+    var tira = Math.floor(Math.random() * 9);
+    switch(tira) {
+      case 0:
+        ledRed1.pwmWrite(color.r.toFixed(0));
+        ledGreen1.pwmWrite(color.g.toFixed(0));
+        ledBlue1.pwmWrite(color.b.toFixed(0));
+        ledRed2.pwmWrite(0);
+        ledGreen2.pwmWrite(0);
+        ledBlue2.pwmWrite(0);
+        ledRed3.pwmWrite(0);
+        ledGreen3.pwmWrite(0);
+        ledBlue3.pwmWrite(0);
+        ledRed4.pwmWrite(0);
+        ledGreen4.pwmWrite(0);
+        ledBlue4.pwmWrite(0);
+        ledRed5.pwmWrite(0);
+        ledGreen5.pwmWrite(0);
+        ledBlue5.pwmWrite(0);
+        ledRed6.pwmWrite(0);
+        ledGreen6.pwmWrite(0);
+        ledBlue6.pwmWrite(0);
+        ledRed7.pwmWrite(0);
+        ledGreen7.pwmWrite(0);
+        ledBlue7.pwmWrite(0);
+        ledRed8.pwmWrite(0);
+        ledGreen8.pwmWrite(0);
+        ledBlue8.pwmWrite(0);
+        break;
+      case 1:
+        ledRed1.pwmWrite(0);
+        ledGreen1.pwmWrite(0);
+        ledBlue1.pwmWrite(0);
+        ledRed2.pwmWrite(color.r.toFixed(0));
+        ledGreen2.pwmWrite(color.g.toFixed(0));
+        ledBlue2.pwmWrite(color.b.toFixed(0));
+        ledRed3.pwmWrite(0);
+        ledGreen3.pwmWrite(0);
+        ledBlue3.pwmWrite(0);
+        ledRed4.pwmWrite(0);
+        ledGreen4.pwmWrite(0);
+        ledBlue4.pwmWrite(0);
+        ledRed5.pwmWrite(0);
+        ledGreen5.pwmWrite(0);
+        ledBlue5.pwmWrite(0);
+        ledRed6.pwmWrite(0);
+        ledGreen6.pwmWrite(0);
+        ledBlue6.pwmWrite(0);
+        ledRed7.pwmWrite(0);
+        ledGreen7.pwmWrite(0);
+        ledBlue7.pwmWrite(0);
+        ledRed8.pwmWrite(0);
+        ledGreen8.pwmWrite(0);
+        ledBlue8.pwmWrite(0);
+        break;
+      case 2:
+        ledRed1.pwmWrite(0);
+        ledGreen1.pwmWrite(0);
+        ledBlue1.pwmWrite(0);
+        ledRed2.pwmWrite(0);
+        ledGreen2.pwmWrite(0);
+        ledBlue2.pwmWrite(0);
+        ledRed3.pwmWrite(color.r.toFixed(0));
+        ledGreen3.pwmWrite(color.g.toFixed(0));
+        ledBlue3.pwmWrite(color.b.toFixed(0));
+        ledRed4.pwmWrite(0);
+        ledGreen4.pwmWrite(0);
+        ledBlue4.pwmWrite(0);
+        ledRed5.pwmWrite(0);
+        ledGreen5.pwmWrite(0);
+        ledBlue5.pwmWrite(0);
+        ledRed6.pwmWrite(0);
+        ledGreen6.pwmWrite(0);
+        ledBlue6.pwmWrite(0);
+        ledRed7.pwmWrite(0);
+        ledGreen7.pwmWrite(0);
+        ledBlue7.pwmWrite(0);
+        ledRed8.pwmWrite(0);
+        ledGreen8.pwmWrite(0);
+        ledBlue8.pwmWrite(0);
+        break;
+      case 3:
+        ledRed1.pwmWrite(0);
+        ledGreen1.pwmWrite(0);
+        ledBlue1.pwmWrite(0);
+        ledRed2.pwmWrite(0);
+        ledGreen2.pwmWrite(0);
+        ledBlue2.pwmWrite(0);
+        ledRed3.pwmWrite(0);
+        ledGreen3.pwmWrite(0);
+        ledBlue3.pwmWrite(0);
+        ledRed4.pwmWrite(color.r.toFixed(0));
+        ledGreen4.pwmWrite(color.g.toFixed(0));
+        ledBlue4.pwmWrite(color.b.toFixed(0));
+        ledRed5.pwmWrite(0);
+        ledGreen5.pwmWrite(0);
+        ledBlue5.pwmWrite(0);
+        ledRed6.pwmWrite(0);
+        ledGreen6.pwmWrite(0);
+        ledBlue6.pwmWrite(0);
+        ledRed7.pwmWrite(0);
+        ledGreen7.pwmWrite(0);
+        ledBlue7.pwmWrite(0);
+        ledRed8.pwmWrite(0);
+        ledGreen8.pwmWrite(0);
+        ledBlue8.pwmWrite(0);
+        break;
+      case 4:
+        ledRed1.pwmWrite(0);
+        ledGreen1.pwmWrite(0);
+        ledBlue1.pwmWrite(0);
+        ledRed2.pwmWrite(0);
+        ledGreen2.pwmWrite(0);
+        ledBlue2.pwmWrite(0);
+        ledRed3.pwmWrite(0);
+        ledGreen3.pwmWrite(0);
+        ledBlue3.pwmWrite(0);
+        ledRed4.pwmWrite(0);
+        ledGreen4.pwmWrite(0);
+        ledBlue4.pwmWrite(0);
+        ledRed5.pwmWrite(color.r.toFixed(0));
+        ledGreen5.pwmWrite(color.g.toFixed(0));
+        ledBlue5.pwmWrite(color.b.toFixed(0));
+        ledRed6.pwmWrite(0);
+        ledGreen6.pwmWrite(0);
+        ledBlue6.pwmWrite(0);
+        ledRed7.pwmWrite(0);
+        ledGreen7.pwmWrite(0);
+        ledBlue7.pwmWrite(0);
+        ledRed8.pwmWrite(0);
+        ledGreen8.pwmWrite(0);
+        ledBlue8.pwmWrite(0);
+        break;
+      case 5:
+        ledRed1.pwmWrite(0);
+        ledGreen1.pwmWrite(0);
+        ledBlue1.pwmWrite(0);
+        ledRed2.pwmWrite(0);
+        ledGreen2.pwmWrite(0);
+        ledBlue2.pwmWrite(0);
+        ledRed3.pwmWrite(0);
+        ledGreen3.pwmWrite(0);
+        ledBlue3.pwmWrite(0);
+        ledRed4.pwmWrite(0);
+        ledGreen4.pwmWrite(0);
+        ledBlue4.pwmWrite(0);
+        ledRed5.pwmWrite(0);
+        ledGreen5.pwmWrite(0);
+        ledBlue5.pwmWrite(0);
+        ledRed6.pwmWrite(color.r.toFixed(0));
+        ledGreen6.pwmWrite(color.g.toFixed(0));
+        ledBlue6.pwmWrite(color.b.toFixed(0));
+        ledRed7.pwmWrite(0);
+        ledGreen7.pwmWrite(0);
+        ledBlue7.pwmWrite(0);
+        ledRed8.pwmWrite(0);
+        ledGreen8.pwmWrite(0);
+        ledBlue8.pwmWrite(0);
+        break;
+      case 6:
+        ledRed1.pwmWrite(0);
+        ledGreen1.pwmWrite(0);
+        ledBlue1.pwmWrite(0);
+        ledRed2.pwmWrite(0);
+        ledGreen2.pwmWrite(0);
+        ledBlue2.pwmWrite(0);
+        ledRed3.pwmWrite(0);
+        ledGreen3.pwmWrite(0);
+        ledBlue3.pwmWrite(0);
+        ledRed4.pwmWrite(0);
+        ledGreen4.pwmWrite(0);
+        ledBlue4.pwmWrite(0);
+        ledRed5.pwmWrite(0);
+        ledGreen5.pwmWrite(0);
+        ledBlue5.pwmWrite(0);
+        ledRed6.pwmWrite(0);
+        ledGreen6.pwmWrite(0);
+        ledBlue6.pwmWrite(0);
+        ledRed7.pwmWrite(color.r.toFixed(0));
+        ledGreen7.pwmWrite(color.g.toFixed(0));
+        ledBlue7.pwmWrite(color.b.toFixed(0));
+        ledRed8.pwmWrite(0);
+        ledGreen8.pwmWrite(0);
+        ledBlue8.pwmWrite(0);
+        break;
+      case 7:
+        ledRed1.pwmWrite(0);
+        ledGreen1.pwmWrite(0);
+        ledBlue1.pwmWrite(0);
+        ledRed2.pwmWrite(0);
+        ledGreen2.pwmWrite(0);
+        ledBlue2.pwmWrite(0);
+        ledRed3.pwmWrite(0);
+        ledGreen3.pwmWrite(0);
+        ledBlue3.pwmWrite(0);
+        ledRed4.pwmWrite(0);
+        ledGreen4.pwmWrite(0);
+        ledBlue4.pwmWrite(0);
+        ledRed5.pwmWrite(0);
+        ledGreen5.pwmWrite(0);
+        ledBlue5.pwmWrite(0);
+        ledRed6.pwmWrite(0);
+        ledGreen6.pwmWrite(0);
+        ledBlue6.pwmWrite(0);
+        ledRed7.pwmWrite(0);
+        ledGreen7.pwmWrite(0);
+        ledBlue7.pwmWrite(0);
+        ledRed8.pwmWrite(color.r.toFixed(0));
+        ledGreen8.pwmWrite(color.g.toFixed(0));
+        ledBlue8.pwmWrite(color.b.toFixed(0));
+        break;
+      case 8:
+        ledRed1.pwmWrite(0);
+        ledGreen1.pwmWrite(0);
+        ledBlue1.pwmWrite(0);
+        ledRed2.pwmWrite(0);
+        ledGreen2.pwmWrite(0);
+        ledBlue2.pwmWrite(0);
+        ledRed3.pwmWrite(0);
+        ledGreen3.pwmWrite(0);
+        ledBlue3.pwmWrite(0);
+        ledRed4.pwmWrite(0);
+        ledGreen4.pwmWrite(0);
+        ledBlue4.pwmWrite(0);
+        ledRed5.pwmWrite(0);
+        ledGreen5.pwmWrite(0);
+        ledBlue5.pwmWrite(0);
+        ledRed6.pwmWrite(0);
+        ledGreen6.pwmWrite(0);
+        ledBlue6.pwmWrite(0);
+        ledRed7.pwmWrite(0);
+        ledGreen7.pwmWrite(0);
+        ledBlue7.pwmWrite(0);
+        ledRed8.pwmWrite(0);
+        ledGreen8.pwmWrite(0);
+        ledBlue8.pwmWrite(0);
+        break;
+    };
+  }, time);
 }
