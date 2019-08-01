@@ -10,14 +10,20 @@ var port;
 var intervalo;
 var date = new Date();
 var easymidi = require('easymidi');
-var input = new easymidi.Input('USB MIDI Classic 49:USB MIDI Classic 49 MIDI 1 20:0');
 var colorMIDI = {
-  m: 0,
+  m: 1,
   r: 0,
   g: 0,
   b: 0,
-  s: 0,
-  e: 0
+  s: 1,
+  e: "0"
+}
+var tempMIDI = {
+ m: 0,
+ r: 0,
+ b: 0,
+ s: 1,
+ e: 0
 }
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -240,55 +246,141 @@ http.listen(4000, function () {
   console.log('Server corriendo en puerto 4000, bien hecho!');
 });
 
+//Enlistar dispositivos MIDI
+if (easymidi.getInputs().length>1) {
+  console.log("Dispositivo MIDI conectado:");
+  console.log(easymidi.getInputs()[1]);
+  var input = new easymidi.Input(easymidi.getInputs()[1]);
+} else {
+  console.log("No hay dispositivo MIDI para conectarse");
+}
+
 //Controlador MIDI. Asumo los CC, cuando los conozca reemplazo
+if (typeof input !== 'undefined') {
 input.on('cc', function (msg) {
   clearInterval(intervalo);
-  if (msg.controller == '82') {
-    colorMIDI.m = msg.value/127;
-  }
   switch(msg.controller) {
-    case 83:
-      colorMIDI.r = msg.value*2*colorMIDI.m;
-      console.log(colorMIDI.r);
+    case 64:
+      if (msg.value > 0) {
+        tempMIDI.m = colorMIDI.m;
+        colorMIDI.m = msg.value*2;
+      } else {
+        colorMIDI.m = tempMIDI.m;
+      }
       break;
-    case 28:
-      colorMIDI.g = msg.value*2*colorMIDI.m;
+    case 48:
+      if (msg.value > 0) {
+        tempMIDI.m = colorMIDI.m;
+        colorMIDI.m = 0;
+      } else {
+        colorMIDI.m = tempMIDI.m;
+      }
       break;
-    case 29:
-      colorMIDI.b = msg.value*2*colorMIDI.m;
-      break;
-    case 16:
-      colorMIDI.s = msg.value;
-      break;
-    case 80:
-      colorMIDI.e = (msg.value/5).toFixed(0);
-      break;
-  }
-
-  switch(colorMIDI.e) {
     case 0:
-      solid(colorMIDI);
+      colorMIDI.m = msg.value/127;
+      break;
+    case 65:
+      if (msg.value > 0) {
+        tempMIDI.r = colorMIDI.r;
+	colorMIDI.r = msg.value*2;
+      } else {
+	colorMIDI.r = tempMIDI.r;
+      }
+      break;
+    case 49:
+      if (msg.value > 0) {
+        tempMIDI.r = colorMIDI.r;
+        colorMIDI.r = 0;
+      } else {
+        colorMIDI.r = tempMIDI.r;
+      }
       break;
     case 1:
-      pulse(colorMIDI,milis);
+      colorMIDI.r = msg.value*2*colorMIDI.m;
+      break;
+    case 66:
+      if (msg.value > 0) {
+        tempMIDI.g = colorMIDI.g;
+        colorMIDI.g = msg.value*2;
+      } else {
+        colorMIDI.g = tempMIDI.g;
+      }
+      break;
+    case 50:
+      if (msg.value > 0) {
+        tempMIDI.g = colorMIDI.g;
+        colorMIDI.g = 0;
+      } else {
+        colorMIDI.g = tempMIDI.g;
+      }
       break;
     case 2:
-      pulseSweep(colorMIDI,milis);
+      colorMIDI.g = msg.value*2*colorMIDI.m;
+      break;
+    case 67:
+      if (msg.value > 0) {
+        tempMIDI.b = colorMIDI.b;
+        colorMIDI.b = msg.value*2;
+      } else {
+        colorMIDI.b = tempMIDI.b;
+      }
+      break;
+    case 51:
+      if (msg.value > 0) {
+        tempMIDI.b = colorMIDI.b;
+        colorMIDI.b = 0;
+      } else {
+        colorMIDI.b = tempMIDI.b;
+      }
       break;
     case 3:
-      rainbow(colorMIDI,milis);
+      colorMIDI.b = msg.value*2*colorMIDI.m;
+      break;
+    case 68:
+      if (msg.value > 0) {
+        tempMIDI.s = colorMIDI.s;
+        colorMIDI.s = 20000/127;
+      } else {
+        colorMIDI.s = tempMIDI.s;
+      }
       break;
     case 4:
-      rando(colorMIDI,milis);
+      colorMIDI.s = 20000/(1+msg.value);
+      break;
+    case 69:
+      if (msg.value > 0) {
+        tempMIDI.e = colorMIDI.e;
+        colorMIDI.e = "1";
+      } else {
+        colorMIDI.e = tempMIDI.e;
+      }
+      break;
+    case 5:
+      colorMIDI.e = (msg.value/25).toFixed(0);
       break;
   }
-  if (colorMIDI.s < 1) {
-    solid(colorMIDI);
-  } else {
-    strobe(colorMIDI,1/colorMIDI.s)
+  switch(colorMIDI.e) {
+    case "0":
+      solid(colorMIDI);
+      break;
+    case "1":
+      strobe(colorMIDI,colorMIDI.s);
+      break;
+    case "2":
+      pulse(colorMIDI,colorMIDI.s);
+      break;
+    case "3":
+      pulseSweep(colorMIDI,colorMIDI.s);
+      break;
+    case "4":
+      rando(colorMIDI,colorMIDI.s);
+      break;
+    case "5":
+      rainbow(colorMIDI,colorMIDI.s);
+      break;
   }
-});
-
+ });
+}
 //QUE HAGO CUANDO EL CLIENTE POSTEA
 io.on('connection', function(socket){
   socket.on('update', function(msg){
@@ -312,33 +404,37 @@ io.on('connection', function(socket){
     clearInterval(intervalo);
     switch (msg.secuencia) {
       case "1":
-        solid(color);
+	solid(color);
         break;
       case "2":
         strobe(color,milis);
         break;
       case "3":
-        pulse(color,milis);
-        break;
+	pulse(color,milis);
+	break;
       case "4":
-        pulseSweep(color,milis);
-        break;
+	pulseSweep(color,milis);
+	break;
       case "5":
-        rainbow(color,milis);
-        break;
+	rainbow(color,milis);
+	break;
       case "6":
-        rando(color,milis);
-        break;
+	rando(color,milis);
+	break;
     };
   });
 });
 
+
 function strobe(color,time) {
+  var toggle;
   intervalo = setInterval(function() {
-  setTimeout(function() {
-      ledRed1.pwmWrite(0);
-      ledGreen1.pwmWrite(0);
-      ledBlue1.pwmWrite(0);
+    var date = new Date();
+    toggle = Math.sin(10*date.getTime()/(1+time));
+    if(toggle<0.9) {
+      ledRed1.pwmWrite(0); //set RED LED to specified value
+      ledGreen1.pwmWrite(0); //set GREEN LED to specified value
+      ledBlue1.pwmWrite(0); //set BLUE LED to specified value
       ledRed2.pwmWrite(0);
       ledGreen2.pwmWrite(0);
       ledBlue2.pwmWrite(0);
@@ -360,11 +456,11 @@ function strobe(color,time) {
       ledRed8.pwmWrite(0);
       ledGreen8.pwmWrite(0);
       ledBlue8.pwmWrite(0);
-    }, 10)
-    setTimeout(function(){
-      ledRed1.pwmWrite(color.r.toFixed(0));
-      ledGreen1.pwmWrite(color.g.toFixed(0));
-      ledBlue1.pwmWrite(color.b.toFixed(0));
+    }
+    if(toggle>0.9){
+      ledRed1.pwmWrite(color.r.toFixed(0)); //set RED LED to specified value
+      ledGreen1.pwmWrite(color.g.toFixed(0)); //set GREEN LED to specified value
+      ledBlue1.pwmWrite(color.b.toFixed(0)); //set BLUE LED to specified value
       ledRed2.pwmWrite(color.r.toFixed(0));
       ledGreen2.pwmWrite(color.g.toFixed(0));
       ledBlue2.pwmWrite(color.b.toFixed(0));
@@ -386,9 +482,8 @@ function strobe(color,time) {
       ledRed8.pwmWrite(color.r.toFixed(0));
       ledGreen8.pwmWrite(color.g.toFixed(0));
       ledBlue8.pwmWrite(color.b.toFixed(0));
-    }, time-10)
-  }, time);
-
+    }
+  }, 16);
 }
 
 function pulseSweep(color,time) {
@@ -427,7 +522,7 @@ function pulseSweep(color,time) {
     ledRed8.pwmWrite((color.r*pulsebrillo8).toFixed(0));
     ledGreen8.pwmWrite((color.g*pulsebrillo8).toFixed(0));
     ledBlue8.pwmWrite((color.b*pulsebrillo8).toFixed(0));
-  }, 5);
+  }, 16);
 }
 
 function pulse(color,time) {
@@ -435,9 +530,9 @@ function pulse(color,time) {
   intervalo = setInterval(function() {
     var date = new Date();
     pulsebrillo = -Math.abs(Math.sin(date.getTime()/time*2))+1;
-    ledRed1.pwmWrite((color.r*pulsebrillo).toFixed(0));
-    ledGreen1.pwmWrite((color.g*pulsebrillo).toFixed(0));
-    ledBlue1.pwmWrite((color.b*pulsebrillo).toFixed(0));
+    ledRed1.pwmWrite((color.r*pulsebrillo).toFixed(0)); //set RED LED to specified value
+    ledGreen1.pwmWrite((color.g*pulsebrillo).toFixed(0)); //set GREEN LED to specified value
+    ledBlue1.pwmWrite((color.b*pulsebrillo).toFixed(0)); //set BLUE LED to specified value
     ledRed2.pwmWrite((color.r*pulsebrillo).toFixed(0));
     ledGreen2.pwmWrite((color.g*pulsebrillo).toFixed(0));
     ledBlue2.pwmWrite((color.b*pulsebrillo).toFixed(0));
@@ -459,7 +554,7 @@ function pulse(color,time) {
     ledRed8.pwmWrite((color.r*pulsebrillo).toFixed(0));
     ledGreen8.pwmWrite((color.g*pulsebrillo).toFixed(0));
     ledBlue8.pwmWrite((color.b*pulsebrillo).toFixed(0));
-  }, 5);
+  }, 16);
 }
 
 function rainbow(color,time) {
@@ -474,6 +569,7 @@ function rainbow(color,time) {
     ledGreen1.pwmWrite((color.g*pulsebrillo1*pulseG).toFixed(0));
     ledBlue1.pwmWrite((color.b*pulsebrillo1*pulseB).toFixed(0));
     pulsebrillo2 = -Math.abs(Math.sin(0.785+date.getTime()/time*2))+1;
+    //pulsebrillo2 = pulsebrillo1;
     ledRed2.pwmWrite((color.r*pulsebrillo2*pulseR).toFixed(0));
     ledGreen2.pwmWrite((color.g*pulsebrillo2*pulseG).toFixed(0));
     ledBlue2.pwmWrite((color.b*pulsebrillo2*pulseB).toFixed(0));
@@ -501,7 +597,7 @@ function rainbow(color,time) {
     ledRed8.pwmWrite((color.r*pulsebrillo8*pulseR).toFixed(0));
     ledGreen8.pwmWrite((color.g*pulsebrillo8*pulseG).toFixed(0));
     ledBlue8.pwmWrite((color.b*pulsebrillo8*pulseB).toFixed(0));
-  }, 5);
+  }, 16);
 }
 
 function solid(color) {
@@ -533,7 +629,7 @@ function solid(color) {
 
 function rando(color,milis) {
   intervalo = setInterval(function() {
-    var tira = Math.floor(Math.random() * 9);
+    var tira = Math.floor(Math.random() * 8);
     switch(tira) {
       case 0:
         ledRed1.pwmWrite(color.r.toFixed(0));
@@ -769,6 +865,32 @@ function rando(color,milis) {
         ledGreen8.pwmWrite(0);
         ledBlue8.pwmWrite(0);
         break;
-    };
-  }, time);
+    }
+    setTimeout(function() {
+      ledRed1.pwmWrite(0);
+      ledGreen1.pwmWrite(0);
+      ledBlue1.pwmWrite(0);
+      ledRed2.pwmWrite(0);
+      ledGreen2.pwmWrite(0);
+      ledBlue2.pwmWrite(0);
+      ledRed3.pwmWrite(0);
+      ledGreen3.pwmWrite(0);
+      ledBlue3.pwmWrite(0);
+      ledRed4.pwmWrite(0);
+      ledGreen4.pwmWrite(0);
+      ledBlue4.pwmWrite(0);
+      ledRed5.pwmWrite(0);
+      ledGreen5.pwmWrite(0);
+      ledBlue5.pwmWrite(0);
+      ledRed6.pwmWrite(0);
+      ledGreen6.pwmWrite(0);
+      ledBlue6.pwmWrite(0);
+      ledRed7.pwmWrite(0);
+      ledGreen7.pwmWrite(0);
+      ledBlue7.pwmWrite(0);
+      ledRed8.pwmWrite(0);
+      ledGreen8.pwmWrite(0);
+      ledBlue8.pwmWrite(0);
+    }, 16);
+  }, milis/4);
 }
