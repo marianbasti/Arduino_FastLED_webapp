@@ -54,6 +54,7 @@ ledRed8 = new Gpio(23, {mode: Gpio.OUTPUT}), //use GPIO pin 4 as output for RED
 ledGreen8 = new Gpio(24, {mode: Gpio.OUTPUT}), //use GPIO pin 17 as output for GREEN
 ledBlue8 = new Gpio(25, {mode: Gpio.OUTPUT}), //use GPIO pin 27 as output for BLUEledRed1 = new Gpio(2, {mode: Gpio.OUTPUT}), //use GPIO pin 4 as output for RED
 
+
 //RESET RGB LED
 ledRed1.digitalWrite(0); // Turn RED LED off
 ledGreen1.digitalWrite(0); // Turn GREEN LED off
@@ -260,6 +261,64 @@ if (typeof input !== 'undefined') {
 input.on('cc', function (msg) {
   clearInterval(intervalo);
   switch(msg.controller) {
+    case 0:
+      colorMIDI.m = msg.value/127;
+
+      colorMIDI.r = msg.value*2*colorMIDI.m;
+      break;
+    case 1:
+      colorMIDI.r = msg.value*2*colorMIDI.m;
+      break;
+    case 2:
+      colorMIDI.g = msg.value*2*colorMIDI.m;
+      break;
+    case 3:
+      colorMIDI.b = msg.value*2*colorMIDI.m;
+      break;
+    case 33:
+       if (msg.value > 0) {
+        tempMIDI.e = colorMIDI.e;
+        tempMIDI.r = colorMIDI.r;
+        colorMIDI.r = 255;
+        colorMIDI.e = "1";
+      } else {
+        colorMIDI.e = tempMIDI.e;
+        colorMIDI.r = tempMIDI.r;
+      }
+      break;
+    case 34:
+       if (msg.value > 0) {
+        tempMIDI.e = colorMIDI.e;
+        tempMIDI.g = colorMIDI.g;
+        colorMIDI.g = 255;
+        colorMIDI.e = "1";
+      } else {
+        colorMIDI.e = tempMIDI.e;
+        colorMIDI.g = tempMIDI.g;
+      }
+      break;
+    case 35:
+       if (msg.value > 0) {
+        tempMIDI.e = colorMIDI.e;
+        tempMIDI.b = colorMIDI.b;
+        colorMIDI.b = 255;
+        colorMIDI.e = "1";
+      } else {
+        colorMIDI.e = tempMIDI.e;
+        colorMIDI.b = tempMIDI.b;
+      }
+      break;
+    case 36:
+       if (msg.value > 0) {
+        tempMIDI.e = colorMIDI.e;
+        tempMIDI.r = colorMIDI.r;
+        colorMIDI.r = 255;
+        colorMIDI.e = "1";
+      } else {
+        colorMIDI.e = tempMIDI.e;
+        colorMIDI.r = tempMIDI.r;
+      }
+      break;
     case 64:
       if (msg.value > 0) {
         tempMIDI.m = colorMIDI.m;
@@ -275,9 +334,6 @@ input.on('cc', function (msg) {
       } else {
         colorMIDI.m = tempMIDI.m;
       }
-      break;
-    case 0:
-      colorMIDI.m = msg.value/127;
       break;
     case 65:
       if (msg.value > 0) {
@@ -295,9 +351,6 @@ input.on('cc', function (msg) {
         colorMIDI.r = tempMIDI.r;
       }
       break;
-    case 1:
-      colorMIDI.r = msg.value*2*colorMIDI.m;
-      break;
     case 66:
       if (msg.value > 0) {
         tempMIDI.g = colorMIDI.g;
@@ -314,9 +367,6 @@ input.on('cc', function (msg) {
         colorMIDI.g = tempMIDI.g;
       }
       break;
-    case 2:
-      colorMIDI.g = msg.value*2*colorMIDI.m;
-      break;
     case 67:
       if (msg.value > 0) {
         tempMIDI.b = colorMIDI.b;
@@ -332,9 +382,6 @@ input.on('cc', function (msg) {
       } else {
         colorMIDI.b = tempMIDI.b;
       }
-      break;
-    case 3:
-      colorMIDI.b = msg.value*2*colorMIDI.m;
       break;
     case 68:
       if (msg.value > 0) {
@@ -379,6 +426,7 @@ input.on('cc', function (msg) {
       rainbow(colorMIDI,colorMIDI.s);
       break;
   }
+  console.log(msg);
  });
 }
 //QUE HAGO CUANDO EL CLIENTE POSTEA
@@ -432,56 +480,24 @@ function strobe(color,time) {
     var date = new Date();
     toggle = Math.sin(10*date.getTime()/(1+time));
     if(toggle<0.9) {
-      ledRed1.pwmWrite(0); //set RED LED to specified value
-      ledGreen1.pwmWrite(0); //set GREEN LED to specified value
-      ledBlue1.pwmWrite(0); //set BLUE LED to specified value
-      ledRed2.pwmWrite(0);
-      ledGreen2.pwmWrite(0);
-      ledBlue2.pwmWrite(0);
-      ledRed3.pwmWrite(0);
-      ledGreen3.pwmWrite(0);
-      ledBlue3.pwmWrite(0);
-      ledRed4.pwmWrite(0);
-      ledGreen4.pwmWrite(0);
-      ledBlue4.pwmWrite(0);
-      ledRed5.pwmWrite(0);
-      ledGreen5.pwmWrite(0);
-      ledBlue5.pwmWrite(0);
-      ledRed6.pwmWrite(0);
-      ledGreen6.pwmWrite(0);
-      ledBlue6.pwmWrite(0);
-      ledRed7.pwmWrite(0);
-      ledGreen7.pwmWrite(0);
-      ledBlue7.pwmWrite(0);
-      ledRed8.pwmWrite(0);
-      ledGreen8.pwmWrite(0);
-      ledBlue8.pwmWrite(0);
+      setLED(0,0,0,0);
+      setLED(1,0,0,0);
+      setLED(2,0,0,0);
+      setLED(3,0,0,0);
+      setLED(4,0,0,0);
+      setLED(5,0,0,0);
+      setLED(6,0,0,0);
+      setLED(7,0,0,0);
     }
     if(toggle>0.9){
-      ledRed1.pwmWrite(color.r.toFixed(0)); //set RED LED to specified value
-      ledGreen1.pwmWrite(color.g.toFixed(0)); //set GREEN LED to specified value
-      ledBlue1.pwmWrite(color.b.toFixed(0)); //set BLUE LED to specified value
-      ledRed2.pwmWrite(color.r.toFixed(0));
-      ledGreen2.pwmWrite(color.g.toFixed(0));
-      ledBlue2.pwmWrite(color.b.toFixed(0));
-      ledRed3.pwmWrite(color.r.toFixed(0));
-      ledGreen3.pwmWrite(color.g.toFixed(0));
-      ledBlue3.pwmWrite(color.b.toFixed(0));
-      ledRed4.pwmWrite(color.r.toFixed(0));
-      ledGreen4.pwmWrite(color.g.toFixed(0));
-      ledBlue4.pwmWrite(color.b.toFixed(0));
-      ledRed5.pwmWrite(color.r.toFixed(0));
-      ledGreen5.pwmWrite(color.g.toFixed(0));
-      ledBlue5.pwmWrite(color.b.toFixed(0));
-      ledRed6.pwmWrite(color.r.toFixed(0));
-      ledGreen6.pwmWrite(color.g.toFixed(0));
-      ledBlue6.pwmWrite(color.b.toFixed(0));
-      ledRed7.pwmWrite(color.r.toFixed(0));
-      ledGreen7.pwmWrite(color.g.toFixed(0));
-      ledBlue7.pwmWrite(color.b.toFixed(0));
-      ledRed8.pwmWrite(color.r.toFixed(0));
-      ledGreen8.pwmWrite(color.g.toFixed(0));
-      ledBlue8.pwmWrite(color.b.toFixed(0));
+      setLED(0,color.r,color.g,color.b);
+      setLED(1,color.r,color.g,color.b);
+      setLED(2,color.r,color.g,color.b);
+      setLED(3,color.r,color.g,color.b);
+      setLED(4,color.r,color.g,color.b);
+      setLED(5,color.r,color.g,color.b);
+      setLED(6,color.r,color.g,color.b);
+      setLED(7,color.r,color.g,color.b);
     }
   }, 16);
 }
@@ -491,37 +507,21 @@ function pulseSweep(color,time) {
   intervalo = setInterval(function() {
     var date = new Date();
     pulsebrillo1 = -Math.abs(Math.sin(date.getTime()/time*2))+1;
-    ledRed1.pwmWrite((color.r*pulsebrillo1).toFixed(0));
-    ledGreen1.pwmWrite((color.g*pulsebrillo1).toFixed(0));
-    ledBlue1.pwmWrite((color.b*pulsebrillo1).toFixed(0));
+    setLED(0,color.r*pulsebrillo1,color.g*pulsebrillo1,color.b*pulsebrillo1);
     pulsebrillo2 = -Math.abs(Math.sin(0.785+date.getTime()/time*2))+1;
-    ledRed2.pwmWrite((color.r*pulsebrillo2).toFixed(0));
-    ledGreen2.pwmWrite((color.g*pulsebrillo2).toFixed(0));
-    ledBlue2.pwmWrite((color.b*pulsebrillo2).toFixed(0));
+    setLED(1,color.r*pulsebrillo2,color.g*pulsebrillo2,color.b*pulsebrillo2);
     pulsebrillo3 = -Math.abs(Math.sin(1.57+date.getTime()/time*2))+1;
-    ledRed3.pwmWrite((color.r*pulsebrillo3).toFixed(0));
-    ledGreen3.pwmWrite((color.g*pulsebrillo3).toFixed(0));
-    ledBlue3.pwmWrite((color.b*pulsebrillo3).toFixed(0));
+    setLED(2,color.r*pulsebrillo3,color.g*pulsebrillo3,color.b*pulsebrillo3);
     pulsebrillo4 = -Math.abs(Math.sin(2.356+date.getTime()/time*2))+1;
-    ledRed4.pwmWrite((color.r*pulsebrillo4).toFixed(0));
-    ledGreen4.pwmWrite((color.g*pulsebrillo4).toFixed(0));
-    ledBlue4.pwmWrite((color.b*pulsebrillo4).toFixed(0));
+    setLED(3,color.r*pulsebrillo4,color.g*pulsebrillo4,color.b*pulsebrillo4);
     pulsebrillo5 = -Math.abs(Math.sin(3.1415+date.getTime()/time*2))+1;
-    ledRed5.pwmWrite((color.r*pulsebrillo5).toFixed(0));
-    ledGreen5.pwmWrite((color.g*pulsebrillo5).toFixed(0));
-    ledBlue5.pwmWrite((color.b*pulsebrillo5).toFixed(0));
+    setLED(4,color.r*pulsebrillo5,color.g*pulsebrillo5,color.b*pulsebrillo5);
     pulsebrillo6 = -Math.abs(Math.sin(3.927+date.getTime()/time*2))+1;
-    ledRed6.pwmWrite((color.r*pulsebrillo6).toFixed(0));
-    ledGreen6.pwmWrite((color.g*pulsebrillo6).toFixed(0));
-    ledBlue6.pwmWrite((color.b*pulsebrillo6).toFixed(0));
+    setLED(5,color.r*pulsebrillo6,color.g*pulsebrillo6,color.b*pulsebrillo6);
     pulsebrillo7 = -Math.abs(Math.sin(4.712+date.getTime()/time*2))+1;
-    ledRed7.pwmWrite((color.r*pulsebrillo7).toFixed(0));
-    ledGreen7.pwmWrite((color.g*pulsebrillo7).toFixed(0));
-    ledBlue7.pwmWrite((color.b*pulsebrillo7).toFixed(0));
+    setLED(6,color.r*pulsebrillo7,color.g*pulsebrillo7,color.b*pulsebrillo7);
     pulsebrillo8 = -Math.abs(Math.sin(5.498+date.getTime()/time*2))+1;
-    ledRed8.pwmWrite((color.r*pulsebrillo8).toFixed(0));
-    ledGreen8.pwmWrite((color.g*pulsebrillo8).toFixed(0));
-    ledBlue8.pwmWrite((color.b*pulsebrillo8).toFixed(0));
+    setLED(7,color.r*pulsebrillo8,color.g*pulsebrillo8,color.b*pulsebrillo8);
   }, 16);
 }
 
@@ -530,30 +530,14 @@ function pulse(color,time) {
   intervalo = setInterval(function() {
     var date = new Date();
     pulsebrillo = -Math.abs(Math.sin(date.getTime()/time*2))+1;
-    ledRed1.pwmWrite((color.r*pulsebrillo).toFixed(0)); //set RED LED to specified value
-    ledGreen1.pwmWrite((color.g*pulsebrillo).toFixed(0)); //set GREEN LED to specified value
-    ledBlue1.pwmWrite((color.b*pulsebrillo).toFixed(0)); //set BLUE LED to specified value
-    ledRed2.pwmWrite((color.r*pulsebrillo).toFixed(0));
-    ledGreen2.pwmWrite((color.g*pulsebrillo).toFixed(0));
-    ledBlue2.pwmWrite((color.b*pulsebrillo).toFixed(0));
-    ledRed3.pwmWrite((color.r*pulsebrillo).toFixed(0));
-    ledGreen3.pwmWrite((color.g*pulsebrillo).toFixed(0));
-    ledBlue3.pwmWrite((color.b*pulsebrillo).toFixed(0));
-    ledRed4.pwmWrite((color.r*pulsebrillo).toFixed(0));
-    ledGreen4.pwmWrite((color.g*pulsebrillo).toFixed(0));
-    ledBlue4.pwmWrite((color.b*pulsebrillo).toFixed(0));
-    ledRed5.pwmWrite((color.r*pulsebrillo).toFixed(0));
-    ledGreen5.pwmWrite((color.g*pulsebrillo).toFixed(0));
-    ledBlue5.pwmWrite((color.b*pulsebrillo).toFixed(0));
-    ledRed6.pwmWrite((color.r*pulsebrillo).toFixed(0));
-    ledGreen6.pwmWrite((color.g*pulsebrillo).toFixed(0));
-    ledBlue6.pwmWrite((color.b*pulsebrillo).toFixed(0));
-    ledRed7.pwmWrite((color.r*pulsebrillo).toFixed(0));
-    ledGreen7.pwmWrite((color.g*pulsebrillo).toFixed(0));
-    ledBlue7.pwmWrite((color.b*pulsebrillo).toFixed(0));
-    ledRed8.pwmWrite((color.r*pulsebrillo).toFixed(0));
-    ledGreen8.pwmWrite((color.g*pulsebrillo).toFixed(0));
-    ledBlue8.pwmWrite((color.b*pulsebrillo).toFixed(0));
+    setLED(0,color.r*pulsebrillo,color.g*pulsebrillo,color.b*pulsebrillo);
+    setLED(1,color.r*pulsebrillo,color.g*pulsebrillo,color.b*pulsebrillo);
+    setLED(2,color.r*pulsebrillo,color.g*pulsebrillo,color.b*pulsebrillo);
+    setLED(3,color.r*pulsebrillo,color.g*pulsebrillo,color.b*pulsebrillo);
+    setLED(4,color.r*pulsebrillo,color.g*pulsebrillo,color.b*pulsebrillo);
+    setLED(5,color.r*pulsebrillo,color.g*pulsebrillo,color.b*pulsebrillo);
+    setLED(6,color.r*pulsebrillo,color.g*pulsebrillo,color.b*pulsebrillo);
+    setLED(7,color.r*pulsebrillo,color.g*pulsebrillo,color.b*pulsebrillo);
   }, 16);
 }
 
@@ -565,66 +549,33 @@ function rainbow(color,time) {
     pulseG = -Math.abs(Math.sin(2.094+date.getTime()/time*2))+1;
     pulseB = -Math.abs(Math.sin(4.189+date.getTime()/time*2))+1;
     pulsebrillo1 = -Math.abs(Math.sin(date.getTime()/time*2))+1;
-    ledRed1.pwmWrite((color.r*pulsebrillo1*pulseR).toFixed(0));
-    ledGreen1.pwmWrite((color.g*pulsebrillo1*pulseG).toFixed(0));
-    ledBlue1.pwmWrite((color.b*pulsebrillo1*pulseB).toFixed(0));
+    setLED(0,color.r*pulseR,color.g*pulseG,color.b*pulseB);
     pulsebrillo2 = -Math.abs(Math.sin(0.785+date.getTime()/time*2))+1;
-    //pulsebrillo2 = pulsebrillo1;
-    ledRed2.pwmWrite((color.r*pulsebrillo2*pulseR).toFixed(0));
-    ledGreen2.pwmWrite((color.g*pulsebrillo2*pulseG).toFixed(0));
-    ledBlue2.pwmWrite((color.b*pulsebrillo2*pulseB).toFixed(0));
+    setLED(1,color.r*pulseR,color.g*pulseG,color.b*pulseB);
     pulsebrillo3 = -Math.abs(Math.sin(1.57+date.getTime()/time*2))+1;
-    ledRed3.pwmWrite((color.r*pulsebrillo3*pulseR).toFixed(0));
-    ledGreen3.pwmWrite((color.g*pulsebrillo3*pulseG).toFixed(0));
-    ledBlue3.pwmWrite((color.b*pulsebrillo3*pulseB).toFixed(0));
+    setLED(2,color.r*pulseR,color.g*pulseG,color.b*pulseB);
     pulsebrillo4 = -Math.abs(Math.sin(2.356+date.getTime()/time*2))+1;
-    ledRed4.pwmWrite((color.r*pulsebrillo4*pulseR).toFixed(0));
-    ledGreen4.pwmWrite((color.g*pulsebrillo4*pulseG).toFixed(0));
-    ledBlue4.pwmWrite((color.b*pulsebrillo4*pulseB).toFixed(0));
+    setLED(3,color.r*pulseR,color.g*pulseG,color.b*pulseB);
     pulsebrillo5 = -Math.abs(Math.sin(3.1415+date.getTime()/time*2))+1;
-    ledRed5.pwmWrite((color.r*pulsebrillo5*pulseR).toFixed(0));
-    ledGreen5.pwmWrite((color.g*pulsebrillo5*pulseG).toFixed(0));
-    ledBlue5.pwmWrite((color.b*pulsebrillo5*pulseB).toFixed(0));
+    setLED(4,color.r*pulseR,color.g*pulseG,color.b*pulseB);
     pulsebrillo6 = -Math.abs(Math.sin(3.927+date.getTime()/time*2))+1;
-    ledRed6.pwmWrite((color.r*pulsebrillo6*pulseR).toFixed(0));
-    ledGreen6.pwmWrite((color.g*pulsebrillo6*pulseG).toFixed(0));
-    ledBlue6.pwmWrite((color.b*pulsebrillo6*pulseB).toFixed(0));
+    setLED(5,color.r*pulseR,color.g*pulseG,color.b*pulseB);
     pulsebrillo7 = -Math.abs(Math.sin(4.712+date.getTime()/time*2))+1;
-    ledRed7.pwmWrite((color.r*pulsebrillo7*pulseR).toFixed(0));
-    ledGreen7.pwmWrite((color.g*pulsebrillo7*pulseG).toFixed(0));
-    ledBlue7.pwmWrite((color.b*pulsebrillo7*pulseB).toFixed(0));
+    setLED(6,color.r*pulseR,color.g*pulseG,color.b*pulseB);
     pulsebrillo8 = -Math.abs(Math.sin(5.498+date.getTime()/time*2))+1;
-    ledRed8.pwmWrite((color.r*pulsebrillo8*pulseR).toFixed(0));
-    ledGreen8.pwmWrite((color.g*pulsebrillo8*pulseG).toFixed(0));
-    ledBlue8.pwmWrite((color.b*pulsebrillo8*pulseB).toFixed(0));
+    setLED(7,color.r*pulseR,color.g*pulseG,color.b*pulseB);
   }, 16);
 }
 
 function solid(color) {
-  ledRed1.pwmWrite(color.r.toFixed(0));
-  ledGreen1.pwmWrite(color.g.toFixed(0));
-  ledBlue1.pwmWrite(color.b.toFixed(0));
-  ledRed2.pwmWrite(color.r.toFixed(0));
-  ledGreen2.pwmWrite(color.g.toFixed(0));
-  ledBlue2.pwmWrite(color.b.toFixed(0));
-  ledRed3.pwmWrite(color.r.toFixed(0));
-  ledGreen3.pwmWrite(color.g.toFixed(0));
-  ledBlue3.pwmWrite(color.b.toFixed(0));
-  ledRed4.pwmWrite(color.r.toFixed(0));
-  ledGreen4.pwmWrite(color.g.toFixed(0));
-  ledBlue4.pwmWrite(color.b.toFixed(0));
-  ledRed5.pwmWrite(color.r.toFixed(0));
-  ledGreen5.pwmWrite(color.g.toFixed(0));
-  ledBlue5.pwmWrite(color.b.toFixed(0));
-  ledRed6.pwmWrite(color.r.toFixed(0));
-  ledGreen6.pwmWrite(color.g.toFixed(0));
-  ledBlue6.pwmWrite(color.b.toFixed(0));
-  ledRed7.pwmWrite(color.r.toFixed(0));
-  ledGreen7.pwmWrite(color.g.toFixed(0));
-  ledBlue7.pwmWrite(color.b.toFixed(0));
-  ledRed8.pwmWrite(color.r.toFixed(0));
-  ledGreen8.pwmWrite(color.g.toFixed(0));
-  ledBlue8.pwmWrite(color.b.toFixed(0));
+  setLED(0,color.r,color.g,color.b);
+  setLED(1,color.r,color.g,color.b);
+  setLED(2,color.r,color.g,color.b);
+  setLED(3,color.r,color.g,color.b);
+  setLED(4,color.r,color.g,color.b);
+  setLED(5,color.r,color.g,color.b);
+  setLED(6,color.r,color.g,color.b);
+  setLED(7,color.r,color.g,color.b);
 }
 
 function rando(color,milis) {
@@ -632,265 +583,156 @@ function rando(color,milis) {
     var tira = Math.floor(Math.random() * 8);
     switch(tira) {
       case 0:
-        ledRed1.pwmWrite(color.r.toFixed(0));
-        ledGreen1.pwmWrite(color.g.toFixed(0));
-        ledBlue1.pwmWrite(color.b.toFixed(0));
-        ledRed2.pwmWrite(0);
-        ledGreen2.pwmWrite(0);
-        ledBlue2.pwmWrite(0);
-        ledRed3.pwmWrite(0);
-        ledGreen3.pwmWrite(0);
-        ledBlue3.pwmWrite(0);
-        ledRed4.pwmWrite(0);
-        ledGreen4.pwmWrite(0);
-        ledBlue4.pwmWrite(0);
-        ledRed5.pwmWrite(0);
-        ledGreen5.pwmWrite(0);
-        ledBlue5.pwmWrite(0);
-        ledRed6.pwmWrite(0);
-        ledGreen6.pwmWrite(0);
-        ledBlue6.pwmWrite(0);
-        ledRed7.pwmWrite(0);
-        ledGreen7.pwmWrite(0);
-        ledBlue7.pwmWrite(0);
-        ledRed8.pwmWrite(0);
-        ledGreen8.pwmWrite(0);
-        ledBlue8.pwmWrite(0);
+        setLED(0,color.r,color.g,color.b);
+        setLED(1,0,0,0);
+        setLED(2,0,0,0);
+        setLED(3,0,0,0);
+        setLED(4,0,0,0);
+        setLED(5,0,0,0);
+        setLED(6,0,0,0);
+        setLED(7,0,0,0);
         break;
       case 1:
-        ledRed1.pwmWrite(0);
-        ledGreen1.pwmWrite(0);
-        ledBlue1.pwmWrite(0);
-        ledRed2.pwmWrite(color.r.toFixed(0));
-        ledGreen2.pwmWrite(color.g.toFixed(0));
-        ledBlue2.pwmWrite(color.b.toFixed(0));
-        ledRed3.pwmWrite(0);
-        ledGreen3.pwmWrite(0);
-        ledBlue3.pwmWrite(0);
-        ledRed4.pwmWrite(0);
-        ledGreen4.pwmWrite(0);
-        ledBlue4.pwmWrite(0);
-        ledRed5.pwmWrite(0);
-        ledGreen5.pwmWrite(0);
-        ledBlue5.pwmWrite(0);
-        ledRed6.pwmWrite(0);
-        ledGreen6.pwmWrite(0);
-        ledBlue6.pwmWrite(0);
-        ledRed7.pwmWrite(0);
-        ledGreen7.pwmWrite(0);
-        ledBlue7.pwmWrite(0);
-        ledRed8.pwmWrite(0);
-        ledGreen8.pwmWrite(0);
-        ledBlue8.pwmWrite(0);
+        setLED(1,color.r,color.g,color.b);
+        setLED(0,0,0,0);
+        setLED(2,0,0,0);
+        setLED(3,0,0,0);
+        setLED(4,0,0,0);
+        setLED(5,0,0,0);
+        setLED(6,0,0,0);
+        setLED(7,0,0,0);
         break;
       case 2:
-        ledRed1.pwmWrite(0);
-        ledGreen1.pwmWrite(0);
-        ledBlue1.pwmWrite(0);
-        ledRed2.pwmWrite(0);
-        ledGreen2.pwmWrite(0);
-        ledBlue2.pwmWrite(0);
-        ledRed3.pwmWrite(color.r.toFixed(0));
-        ledGreen3.pwmWrite(color.g.toFixed(0));
-        ledBlue3.pwmWrite(color.b.toFixed(0));
-        ledRed4.pwmWrite(0);
-        ledGreen4.pwmWrite(0);
-        ledBlue4.pwmWrite(0);
-        ledRed5.pwmWrite(0);
-        ledGreen5.pwmWrite(0);
-        ledBlue5.pwmWrite(0);
-        ledRed6.pwmWrite(0);
-        ledGreen6.pwmWrite(0);
-        ledBlue6.pwmWrite(0);
-        ledRed7.pwmWrite(0);
-        ledGreen7.pwmWrite(0);
-        ledBlue7.pwmWrite(0);
-        ledRed8.pwmWrite(0);
-        ledGreen8.pwmWrite(0);
-        ledBlue8.pwmWrite(0);
+        setLED(2,color.r,color.g,color.b);
+        setLED(1,0,0,0);
+        setLED(0,0,0,0);
+        setLED(3,0,0,0);
+        setLED(4,0,0,0);
+        setLED(5,0,0,0);
+        setLED(6,0,0,0);
+        setLED(7,0,0,0);
         break;
       case 3:
-        ledRed1.pwmWrite(0);
-        ledGreen1.pwmWrite(0);
-        ledBlue1.pwmWrite(0);
-        ledRed2.pwmWrite(0);
-        ledGreen2.pwmWrite(0);
-        ledBlue2.pwmWrite(0);
-        ledRed3.pwmWrite(0);
-        ledGreen3.pwmWrite(0);
-        ledBlue3.pwmWrite(0);
-        ledRed4.pwmWrite(color.r.toFixed(0));
-        ledGreen4.pwmWrite(color.g.toFixed(0));
-        ledBlue4.pwmWrite(color.b.toFixed(0));
-        ledRed5.pwmWrite(0);
-        ledGreen5.pwmWrite(0);
-        ledBlue5.pwmWrite(0);
-        ledRed6.pwmWrite(0);
-        ledGreen6.pwmWrite(0);
-        ledBlue6.pwmWrite(0);
-        ledRed7.pwmWrite(0);
-        ledGreen7.pwmWrite(0);
-        ledBlue7.pwmWrite(0);
-        ledRed8.pwmWrite(0);
-        ledGreen8.pwmWrite(0);
-        ledBlue8.pwmWrite(0);
+        setLED(3,color.r,color.g,color.b);
+        setLED(1,0,0,0);
+        setLED(2,0,0,0);
+        setLED(0,0,0,0);
+        setLED(4,0,0,0);
+        setLED(5,0,0,0);
+        setLED(6,0,0,0);
+        setLED(7,0,0,0);
         break;
       case 4:
-        ledRed1.pwmWrite(0);
-        ledGreen1.pwmWrite(0);
-        ledBlue1.pwmWrite(0);
-        ledRed2.pwmWrite(0);
-        ledGreen2.pwmWrite(0);
-        ledBlue2.pwmWrite(0);
-        ledRed3.pwmWrite(0);
-        ledGreen3.pwmWrite(0);
-        ledBlue3.pwmWrite(0);
-        ledRed4.pwmWrite(0);
-        ledGreen4.pwmWrite(0);
-        ledBlue4.pwmWrite(0);
-        ledRed5.pwmWrite(color.r.toFixed(0));
-        ledGreen5.pwmWrite(color.g.toFixed(0));
-        ledBlue5.pwmWrite(color.b.toFixed(0));
-        ledRed6.pwmWrite(0);
-        ledGreen6.pwmWrite(0);
-        ledBlue6.pwmWrite(0);
-        ledRed7.pwmWrite(0);
-        ledGreen7.pwmWrite(0);
-        ledBlue7.pwmWrite(0);
-        ledRed8.pwmWrite(0);
-        ledGreen8.pwmWrite(0);
-        ledBlue8.pwmWrite(0);
+        setLED(4,color.r,color.g,color.b);
+        setLED(1,0,0,0);
+        setLED(2,0,0,0);
+        setLED(3,0,0,0);
+        setLED(0,0,0,0);
+        setLED(5,0,0,0);
+        setLED(6,0,0,0);
+        setLED(7,0,0,0);
         break;
       case 5:
-        ledRed1.pwmWrite(0);
-        ledGreen1.pwmWrite(0);
-        ledBlue1.pwmWrite(0);
-        ledRed2.pwmWrite(0);
-        ledGreen2.pwmWrite(0);
-        ledBlue2.pwmWrite(0);
-        ledRed3.pwmWrite(0);
-        ledGreen3.pwmWrite(0);
-        ledBlue3.pwmWrite(0);
-        ledRed4.pwmWrite(0);
-        ledGreen4.pwmWrite(0);
-        ledBlue4.pwmWrite(0);
-        ledRed5.pwmWrite(0);
-        ledGreen5.pwmWrite(0);
-        ledBlue5.pwmWrite(0);
-        ledRed6.pwmWrite(color.r.toFixed(0));
-        ledGreen6.pwmWrite(color.g.toFixed(0));
-        ledBlue6.pwmWrite(color.b.toFixed(0));
-        ledRed7.pwmWrite(0);
-        ledGreen7.pwmWrite(0);
-        ledBlue7.pwmWrite(0);
-        ledRed8.pwmWrite(0);
-        ledGreen8.pwmWrite(0);
-        ledBlue8.pwmWrite(0);
+        setLED(5,color.r,color.g,color.b);
+        setLED(1,0,0,0);
+        setLED(2,0,0,0);
+        setLED(3,0,0,0);
+        setLED(4,0,0,0);
+        setLED(0,0,0,0);
+        setLED(6,0,0,0);
+        setLED(7,0,0,0);
         break;
       case 6:
-        ledRed1.pwmWrite(0);
-        ledGreen1.pwmWrite(0);
-        ledBlue1.pwmWrite(0);
-        ledRed2.pwmWrite(0);
-        ledGreen2.pwmWrite(0);
-        ledBlue2.pwmWrite(0);
-        ledRed3.pwmWrite(0);
-        ledGreen3.pwmWrite(0);
-        ledBlue3.pwmWrite(0);
-        ledRed4.pwmWrite(0);
-        ledGreen4.pwmWrite(0);
-        ledBlue4.pwmWrite(0);
-        ledRed5.pwmWrite(0);
-        ledGreen5.pwmWrite(0);
-        ledBlue5.pwmWrite(0);
-        ledRed6.pwmWrite(0);
-        ledGreen6.pwmWrite(0);
-        ledBlue6.pwmWrite(0);
-        ledRed7.pwmWrite(color.r.toFixed(0));
-        ledGreen7.pwmWrite(color.g.toFixed(0));
-        ledBlue7.pwmWrite(color.b.toFixed(0));
-        ledRed8.pwmWrite(0);
-        ledGreen8.pwmWrite(0);
-        ledBlue8.pwmWrite(0);
+        setLED(6,color.r,color.g,color.b);
+        setLED(1,0,0,0);
+        setLED(2,0,0,0);
+        setLED(3,0,0,0);
+        setLED(4,0,0,0);
+        setLED(5,0,0,0);
+        setLED(0,0,0,0);
+        setLED(7,0,0,0);
         break;
       case 7:
-        ledRed1.pwmWrite(0);
-        ledGreen1.pwmWrite(0);
-        ledBlue1.pwmWrite(0);
-        ledRed2.pwmWrite(0);
-        ledGreen2.pwmWrite(0);
-        ledBlue2.pwmWrite(0);
-        ledRed3.pwmWrite(0);
-        ledGreen3.pwmWrite(0);
-        ledBlue3.pwmWrite(0);
-        ledRed4.pwmWrite(0);
-        ledGreen4.pwmWrite(0);
-        ledBlue4.pwmWrite(0);
-        ledRed5.pwmWrite(0);
-        ledGreen5.pwmWrite(0);
-        ledBlue5.pwmWrite(0);
-        ledRed6.pwmWrite(0);
-        ledGreen6.pwmWrite(0);
-        ledBlue6.pwmWrite(0);
-        ledRed7.pwmWrite(0);
-        ledGreen7.pwmWrite(0);
-        ledBlue7.pwmWrite(0);
-        ledRed8.pwmWrite(color.r.toFixed(0));
-        ledGreen8.pwmWrite(color.g.toFixed(0));
-        ledBlue8.pwmWrite(color.b.toFixed(0));
+        setLED(7,color.r,color.g,color.b);
+        setLED(1,0,0,0);
+        setLED(2,0,0,0);
+        setLED(3,0,0,0);
+        setLED(4,0,0,0);
+        setLED(5,0,0,0);
+        setLED(6,0,0,0);
+        setLED(0,0,0,0);
         break;
       case 8:
-        ledRed1.pwmWrite(0);
-        ledGreen1.pwmWrite(0);
-        ledBlue1.pwmWrite(0);
-        ledRed2.pwmWrite(0);
-        ledGreen2.pwmWrite(0);
-        ledBlue2.pwmWrite(0);
-        ledRed3.pwmWrite(0);
-        ledGreen3.pwmWrite(0);
-        ledBlue3.pwmWrite(0);
-        ledRed4.pwmWrite(0);
-        ledGreen4.pwmWrite(0);
-        ledBlue4.pwmWrite(0);
-        ledRed5.pwmWrite(0);
-        ledGreen5.pwmWrite(0);
-        ledBlue5.pwmWrite(0);
-        ledRed6.pwmWrite(0);
-        ledGreen6.pwmWrite(0);
-        ledBlue6.pwmWrite(0);
-        ledRed7.pwmWrite(0);
-        ledGreen7.pwmWrite(0);
-        ledBlue7.pwmWrite(0);
-        ledRed8.pwmWrite(0);
-        ledGreen8.pwmWrite(0);
-        ledBlue8.pwmWrite(0);
+        setLED(0,0,0,0);
+        setLED(1,0,0,0);
+        setLED(2,0,0,0);
+        setLED(3,0,0,0);
+        setLED(4,0,0,0);
+        setLED(5,0,0,0);
+        setLED(6,0,0,0);
+        setLED(7,0,0,0);
         break;
     }
     setTimeout(function() {
-      ledRed1.pwmWrite(0);
-      ledGreen1.pwmWrite(0);
-      ledBlue1.pwmWrite(0);
-      ledRed2.pwmWrite(0);
-      ledGreen2.pwmWrite(0);
-      ledBlue2.pwmWrite(0);
-      ledRed3.pwmWrite(0);
-      ledGreen3.pwmWrite(0);
-      ledBlue3.pwmWrite(0);
-      ledRed4.pwmWrite(0);
-      ledGreen4.pwmWrite(0);
-      ledBlue4.pwmWrite(0);
-      ledRed5.pwmWrite(0);
-      ledGreen5.pwmWrite(0);
-      ledBlue5.pwmWrite(0);
-      ledRed6.pwmWrite(0);
-      ledGreen6.pwmWrite(0);
-      ledBlue6.pwmWrite(0);
-      ledRed7.pwmWrite(0);
-      ledGreen7.pwmWrite(0);
-      ledBlue7.pwmWrite(0);
-      ledRed8.pwmWrite(0);
-      ledGreen8.pwmWrite(0);
-      ledBlue8.pwmWrite(0);
+      setLED(0,0,0,0);
+      setLED(1,0,0,0);
+      setLED(2,0,0,0);
+      setLED(3,0,0,0);
+      setLED(4,0,0,0);
+      setLED(5,0,0,0);
+      setLED(6,0,0,0);
+      setLED(7,0,0,0);
     }, 16);
   }, milis/4);
+}
+
+function rotation(color,time,param) {
+  var date = new Date();
+  var led = ((Math.sin(date.getTime()/time*2)*4)+4).toFixed(0);
+
+}
+
+function setLED(tira,colorR,colorG,colorB) {
+  switch (tira) {
+    case 0:
+      ledRed1.pwmWrite(colorR.toFixed(0));
+      ledGreen1.pwmWrite(colorG.toFixed(0));
+      ledBlue1.pwmWrite(colorB.toFixed(0));
+      break;
+    case 1:
+      ledRed2.pwmWrite(colorR.toFixed(0));
+      ledGreen2.pwmWrite(colorG.toFixed(0));
+      ledBlue2.pwmWrite(colorB.toFixed(0));
+      break;
+    case 2:
+      ledRed3.pwmWrite(colorR.toFixed(0));
+      ledGreen3.pwmWrite(colorG.toFixed(0));
+      ledBlue3.pwmWrite(colorB.toFixed(0));
+      break;
+    case 3:
+      ledRed4.pwmWrite(colorR.toFixed(0));
+      ledGreen4.pwmWrite(colorG.toFixed(0));
+      ledBlue4.pwmWrite(colorB.toFixed(0));
+      break;
+    case 4:
+      ledRed5.pwmWrite(colorR.toFixed(0));
+      ledGreen5.pwmWrite(colorG.toFixed(0));
+      ledBlue5.pwmWrite(colorB.toFixed(0));
+      break;
+    case 5:
+      ledRed6.pwmWrite(colorR.toFixed(0));
+      ledGreen6.pwmWrite(colorG.toFixed(0));
+      ledBlue6.pwmWrite(colorB.toFixed(0));
+      break;
+    case 6:
+      ledRed7.pwmWrite(colorR.toFixed(0));
+      ledGreen7.pwmWrite(colorG.toFixed(0));
+      ledBlue7.pwmWrite(colorB.toFixed(0));
+      break;
+    case 7:
+      ledRed8.pwmWrite(colorR.toFixed(0));
+      ledGreen8.pwmWrite(colorG.toFixed(0));
+      ledBlue8.pwmWrite(colorB.toFixed(0));
+      break;
+  }
 }
