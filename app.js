@@ -15,8 +15,16 @@ var colorMIDI = {
   r: 0,
   g: 0,
   b: 0,
-  s: 1,
-  e: "0"
+  s: 20000,
+  e: "0",
+  p1: 0,
+  p2: 0,
+  p3: 0,
+  p4: 0,
+  p5: 0,
+  p6: 0,
+  p7: 0,
+  p8: 0,
 }
 var tempMIDI = {
  m: 0,
@@ -275,6 +283,30 @@ input.on('cc', function (msg) {
     case 3:
       colorMIDI.b = msg.value*2*colorMIDI.m;
       break;
+    case 16:
+      colorMIDI.p1 = msg.value;
+      break;
+    case 17:
+      colorMIDI.p2 = msg.value;
+      break;
+    case 18:
+      colorMIDI.p3 = msg.value;
+      break;
+    case 19:
+      colorMIDI.p4 = msg.value;
+      break;
+    case 20:
+      colorMIDI.p5 = msg.value;
+      break;
+    case 21:
+      colorMIDI.p6 = msg.value;
+      break;
+    case 22:
+      colorMIDI.p7 = msg.value;
+      break;
+    case 23:
+      colorMIDI.p8 = msg.value;
+      break;
     case 33:
        if (msg.value > 0) {
         tempMIDI.e = colorMIDI.e;
@@ -306,17 +338,6 @@ input.on('cc', function (msg) {
       } else {
         colorMIDI.e = tempMIDI.e;
         colorMIDI.b = tempMIDI.b;
-      }
-      break;
-    case 36:
-       if (msg.value > 0) {
-        tempMIDI.e = colorMIDI.e;
-        tempMIDI.r = colorMIDI.r;
-        colorMIDI.r = 255;
-        colorMIDI.e = "1";
-      } else {
-        colorMIDI.e = tempMIDI.e;
-        colorMIDI.r = tempMIDI.r;
       }
       break;
     case 64:
@@ -405,13 +426,38 @@ input.on('cc', function (msg) {
     case 5:
       colorMIDI.e = (msg.value/25).toFixed(0);
       break;
+    case 6:
+      colorMIDI.e = (6+msg.value/25).toFixed(0);
+      break;
   }
   switch(colorMIDI.e) {
     case "0":
       solid(colorMIDI);
+      var color = rgbToHsl(colorMIDI);
+      var data = ["1", colorMIDI.m,colorMIDI.s,color.h.toFixed(2),color.s.toFixed(2),color.l.toFixed(2)];
+      var mensaje = data.join();
+      console.log("Enviando mensaje a Arduino...");
+      if ( typeof port !== 'undefined') {
+        port.write(mensaje);
+        read();
+        console.log("Mensaje enviado")
+      } else {
+        console.log("No hay dispositivo al que enviarle los datos.");
+      };
       break;
     case "1":
       strobe(colorMIDI,colorMIDI.s);
+      var color = rgbToHsl(colorMIDI);
+      var data = ["2", colorMIDI.m,colorMIDI.s,color.h.toFixed(2),color.s.toFixed(2),color.l.toFixed(2)];
+      var mensaje = data.join();
+      console.log("Enviando mensaje a Arduino...");
+      if ( typeof port !== 'undefined') {
+        port.write(mensaje);
+        read();
+        console.log("Mensaje enviado")
+      } else {
+        console.log("No hay dispositivo al que enviarle los datos.");
+      };
       break;
     case "2":
       pulse(colorMIDI,colorMIDI.s);
@@ -419,21 +465,37 @@ input.on('cc', function (msg) {
     case "3":
       pulseSweep(colorMIDI,colorMIDI.s);
       break;
-    case "4":
-      rando(colorMIDI,colorMIDI.s);
-      break;
     case "5":
+      rando(colorMIDI,colorMIDI.s);
+      var color = rgbToHsl(colorMIDI);
+      var data = ["3", colorMIDI.m,colorMIDI.s,color.h.toFixed(2),color.s.toFixed(2),color.l.toFixed(2)];
+      var mensaje = data.join();
+      console.log("Enviando mensaje a Arduino...");
+      if ( typeof port !== 'undefined') {
+        port.write(mensaje);
+        read();
+        console.log("Mensaje enviado")
+      } else {
+        console.log("No hay dispositivo al que enviarle los datos.");
+      };
+
+      break;
+    case "4":
       rainbow(colorMIDI,colorMIDI.s);
       break;
+    case "6":
+      rotation(colorMIDI,colorMIDI.s,colorMIDI.p1);
+      break;
   }
-  console.log(msg);
+  console.log(colorMIDI.e);
  });
 }
 //QUE HAGO CUANDO EL CLIENTE POSTEA
 io.on('connection', function(socket){
   socket.on('update', function(msg){
     var color = hexToHSL(msg.color);
-    var data = [msg.secuencia, msg.brillo,msg.velocidad,color.h.toFixed(2),color.s.toFixed(2),color.l.toFixed(2)];var mensaje = data.join();
+    var data = [msg.secuencia, msg.brillo,msg.velocidad,color.h.toFixed(2),color.s.toFixed(2),color.l.toFixed(2)];
+    var mensaje = data.join();
     console.log("Enviando mensaje...");
     console.log(msg);
     if ( typeof port !== 'undefined') {
@@ -498,6 +560,7 @@ function strobe(color,time) {
       setLED(5,color.r,color.g,color.b);
       setLED(6,color.r,color.g,color.b);
       setLED(7,color.r,color.g,color.b);
+
     }
   }, 16);
 }
@@ -687,9 +750,19 @@ function rando(color,milis) {
 }
 
 function rotation(color,time,param) {
-  var date = new Date();
-  var led = ((Math.sin(date.getTime()/time*2)*4)+4).toFixed(0);
-
+  intervalo = setInterval(function() {
+    var date = new Date();
+    setLED(0,0,0,0);
+    setLED(1,0,0,0);
+    setLED(2,0,0,0);
+    setLED(3,0,0,0);
+    setLED(4,0,0,0);
+    setLED(5,0,0,0);
+    setLED(6,0,0,0);
+    setLED(7,0,0,0);
+    var led = ((date.getTime()/time*4)%7).toFixed(0);
+    setLED(Number(led),color.r,color.g,color.b);
+  }, time/4);
 }
 
 function setLED(tira,colorR,colorG,colorB) {
@@ -734,5 +807,9 @@ function setLED(tira,colorR,colorG,colorB) {
       ledGreen8.pwmWrite(colorG.toFixed(0));
       ledBlue8.pwmWrite(colorB.toFixed(0));
       break;
+    default:
+      console.log( tira + " no es tira");
+      break;
   }
 }
+
